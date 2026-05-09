@@ -1,0 +1,400 @@
+
+<style>
+  .mode-btn { padding: 7px 20px; border-radius: 8px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); font-size: 13px; cursor: pointer; transition: all .15s; }
+  .mode-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); font-weight: 500; }
+  .phase-btn { padding: 5px 12px; border-radius: 6px; border: 0.5px solid var(--color-border-tertiary); background: transparent; color: var(--color-text-secondary); font-size: 12px; cursor: pointer; transition: all .15s; white-space: nowrap; }
+  .phase-btn.active { background: var(--color-background-secondary); color: var(--color-text-primary); border-color: var(--color-border-primary); font-weight: 500; }
+  .nav-btn { padding: 7px 18px; border-radius: 8px; border: 0.5px solid var(--color-border-secondary); background: transparent; color: var(--color-text-secondary); font-size: 13px; cursor: pointer; transition: background .1s; }
+  .nav-btn:hover { background: var(--color-background-secondary); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; padding: 2px 8px; border-radius: 5px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 7px; border-radius: 4px; margin: 2px 2px 0 0; background: var(--color-background-secondary); color: var(--color-text-secondary); border: 0.5px solid var(--color-border-tertiary); }
+  .tip-box { border-left: 3px solid; border-radius: 0; padding: 10px 14px; font-size: 12px; line-height: 1.7; margin-top: 12px; }
+</style>
+
+<h2 style="position:absolute;left:-9999px">有絲分裂與減數分裂互動步驟說明</h2>
+
+<div style="padding: 16px 4px 8px">
+
+  <div style="display:flex;gap:8px;margin-bottom:16px">
+    <button class="mode-btn active" id="btn-mitosis" onclick="setMode('mitosis')">有絲分裂（Mitosis）</button>
+    <button class="mode-btn" id="btn-meiosis" onclick="setMode('meiosis')">減數分裂（Meiosis）</button>
+  </div>
+
+  <div id="phase-bar" style="display:flex;gap:6px;flex-wrap:wrap;margin-bottom:16px"></div>
+
+  <div style="display:grid;grid-template-columns:1fr 1fr;gap:16px;align-items:start">
+    <div>
+      <svg id="cell-svg" width="100%" viewBox="0 0 280 240" style="border-radius:12px;background:var(--color-background-secondary)"></svg>
+    </div>
+    <div>
+      <div style="display:flex;align-items:center;gap:8px;margin-bottom:8px">
+        <span id="phase-badge" class="badge"></span>
+        <span id="phase-name" style="font-size:15px;font-weight:500;color:var(--color-text-primary)"></span>
+      </div>
+      <div id="phase-desc" style="font-size:13px;color:var(--color-text-secondary);line-height:1.7;margin-bottom:8px"></div>
+      <div id="phase-tags" style="margin-bottom:6px"></div>
+      <div id="phase-tip" class="tip-box" style="display:none"></div>
+    </div>
+  </div>
+
+  <div style="display:flex;justify-content:space-between;align-items:center;margin-top:14px">
+    <button class="nav-btn" id="btn-prev" onclick="go(-1)">← 上一步</button>
+    <span id="step-counter" style="font-size:12px;color:var(--color-text-tertiary)"></span>
+    <button class="nav-btn" id="btn-next" onclick="go(1)">下一步 →</button>
+  </div>
+
+  <div style="margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--color-background-secondary);font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+    <b style="color:var(--color-text-primary)">比較重點</b>｜
+    有絲分裂：1次分裂 → 2個子細胞（2n），染色體數不變，用於生長與修復。
+    減數分裂：2次分裂 → 4個子細胞（n），染色體數減半，用於生殖細胞形成。
+  </div>
+</div>
+
+<script>
+const MITOSIS = [
+  {
+    id:'interphase', name:'間期（Interphase）', badge:'G1+S+G2', badgeColor:'#E6F1FB:#0C447C',
+    desc:'細胞分裂前的準備期，DNA 進行複製（S 期），每條染色體形成兩條姊妹染色分體，由著絲點相連。中心體也完成複製。',
+    tags:['DNA 複製','中心體複製','核膜完整'],
+    tip:'此時染色體呈鬆散染色質狀態，在光學顯微鏡下不可見個別染色體。',
+    tipColor:'#E6F1FB:#185FA5',
+    draw: drawInterphase
+  },
+  {
+    id:'prophase', name:'前期（Prophase）', badge:'分裂期1', badgeColor:'#EEEDFE:#3C3489',
+    desc:'染色質凝縮成可見染色體（每條含2條染色分體）。核膜開始瓦解，紡錘體開始從中心體延伸形成。',
+    tags:['染色體凝縮','核膜消失','紡錘體形成'],
+    tip:'植物細胞無中心體，但仍可由 MTOC 形成紡錘絲，稱為「無星紡錘體」。',
+    tipColor:'#EAF3DE:#27500A',
+    draw: drawProphase
+  },
+  {
+    id:'metaphase', name:'中期（Metaphase）', badge:'分裂期2', badgeColor:'#EEEDFE:#3C3489',
+    desc:'染色體排列在細胞赤道板上，紡錘絲連接每條染色體的著絲點，此期染色體最清晰，適合核型分析。',
+    tags:['赤道板排列','紡錘絲連著絲點','染色體最清晰'],
+    tip:'核型分析（karyotyping）就是在此期製作染色體標本，拍照後依大小排列進行染色體數目/結構分析。',
+    tipColor:'#E6F1FB:#185FA5',
+    draw: drawMetaphase
+  },
+  {
+    id:'anaphase', name:'後期（Anaphase）', badge:'分裂期3', badgeColor:'#EEEDFE:#3C3489',
+    desc:'著絲點分裂，兩條姊妹染色分體分開，各被拉向細胞兩極。此時每極染色體數 = 原來染色體數（2n）。',
+    tags:['著絲點分裂','染色分體分離','染色體數×2 再減半'],
+    tip:'秋水仙素在此步阻斷紡錘絲形成 → 著絲點無法分離 → 染色體數目倍增，常用於育種。',
+    tipColor:'#FAEEDA:#633806',
+    draw: drawAnaphase
+  },
+  {
+    id:'telophase', name:'末期（Telophase）+ 胞質分裂', badge:'分裂期4', badgeColor:'#EEEDFE:#3C3489',
+    desc:'染色體到達兩極，核膜重新形成，染色體解凝縮。動物細胞以縊縮環方式分裂；植物細胞形成細胞板。',
+    tags:['核膜重建','染色體解凝縮','細胞板（植物）/ 縊縮（動物）'],
+    tip:'結果：2個子細胞，每個含與親代相同的染色體數（2n），遺傳組成相同。',
+    tipColor:'#E1F5EE:#085041',
+    draw: drawTelophase
+  }
+];
+
+const MEIOSIS = [
+  {
+    id:'m1-prophase', name:'第一次前期（Prophase I）', badge:'減數I', badgeColor:'#FAECE7:#712B13',
+    desc:'同源染色體配對（聯會），形成四分體。發生互換（crossing over）交換DNA片段，產生基因重組，增加遺傳多樣性。',
+    tags:['聯會','四分體','互換（crossing over）','基因重組'],
+    tip:'互換發生在同源染色體之間的非姊妹染色分體，是基因重組的主要來源。',
+    tipColor:'#FAECE7:#712B13',
+    draw: drawM1Prophase
+  },
+  {
+    id:'m1-metaphase', name:'第一次中期（Metaphase I）', badge:'減數I', badgeColor:'#FAECE7:#712B13',
+    desc:'同源染色體排列在赤道板上（注意：不是單條染色體），每對同源染色體的著絲點分別朝向兩極。',
+    tags:['同源染色體排列赤道板','獨立分配定律依據'],
+    tip:'同源染色體的排列方向隨機 → 獨立分配定律（孟德爾第二定律）的細胞學基礎。',
+    tipColor:'#FAEEDA:#633806',
+    draw: drawM1Metaphase
+  },
+  {
+    id:'m1-anaphase', name:'第一次後期（Anaphase I）', badge:'減數I', badgeColor:'#FAECE7:#712B13',
+    desc:'同源染色體分離，分別移向兩極。注意：此時著絲點不分裂，姊妹染色分體仍相連！染色體數目減半。',
+    tags:['同源染色體分離','著絲點不分裂','染色體數減半（2n→n）'],
+    tip:'此時每極含 n 條染色體，但每條染色體仍由 2 條染色分體組成，DNA量仍是 2C（若原本4C）。',
+    tipColor:'#FAEEDA:#633806',
+    draw: drawM1Anaphase
+  },
+  {
+    id:'m1-telophase', name:'第一次末期（Telophase I）', badge:'減數I', badgeColor:'#FAECE7:#712B13',
+    desc:'形成 2 個子細胞，各含 n 條染色體（每條由 2 條染色分體組成）。視物種而定，可能有短暫間期（不複製 DNA）。',
+    tags:['2個子細胞（n）','不再複製DNA'],
+    tip:'減數分裂 I 與 II 之間的間期稱為間期 II，此時不進行 DNA 複製，這是與有絲分裂間期最大的差別。',
+    tipColor:'#E1F5EE:#085041',
+    draw: drawM1Telophase
+  },
+  {
+    id:'m2-prophase', name:'第二次前期（Prophase II）', badge:'減數II', badgeColor:'#E6F1FB:#0C447C',
+    desc:'與有絲分裂前期類似，核膜消失，紡錘體重新形成。此時每個細胞含 n 條染色體（每條由 2 條染色分體組成）。',
+    tags:['類似有絲分裂','核膜消失','紡錘體形成'],
+    tip:'減數分裂 II 本質上就是一次「一般的有絲分裂」，只是細胞中的染色體數已減半（n）。',
+    tipColor:'#E6F1FB:#185FA5',
+    draw: drawM2Prophase
+  },
+  {
+    id:'m2-anaphase', name:'第二次後期（Anaphase II）', badge:'減數II', badgeColor:'#E6F1FB:#0C447C',
+    desc:'著絲點分裂，姊妹染色分體分開，移向兩極。與有絲分裂後期相同，但此時染色體數只有 n。',
+    tags:['著絲點分裂','染色分體分離','同有絲分裂後期'],
+    draw: drawM2Anaphase
+  },
+  {
+    id:'m2-telophase', name:'第二次末期（Telophase II）+ 結果', badge:'完成', badgeColor:'#E1F5EE:#085041',
+    desc:'最終形成 4 個子細胞，每個含 n 條染色體（單條染色分體），遺傳組成各不相同。動物→精子或卵（加極體）；植物→孢子。',
+    tags:['4個子細胞','染色體數 = n','遺傳組成不同','精子/卵/孢子'],
+    tip:'精原細胞減數分裂→4個精細胞（均可受精）；卵原細胞→1個卵＋3個極體（極體不參與受精）。',
+    tipColor:'#E1F5EE:#085041',
+    draw: drawM2Telophase
+  }
+];
+
+let mode = 'mitosis';
+let step = 0;
+
+function setMode(m) {
+  mode = m;
+  step = 0;
+  document.getElementById('btn-mitosis').className = 'mode-btn' + (m==='mitosis'?' active':'');
+  document.getElementById('btn-meiosis').className = 'mode-btn' + (m==='meiosis'?' active':'');
+  render();
+}
+
+function go(d) {
+  const phases = mode==='mitosis'?MITOSIS:MEIOSIS;
+  step = Math.max(0, Math.min(phases.length-1, step+d));
+  render();
+}
+
+function render() {
+  const phases = mode==='mitosis'?MITOSIS:MEIOSIS;
+  const p = phases[step];
+  const bar = document.getElementById('phase-bar');
+  bar.innerHTML = phases.map((ph,i)=>
+    `<button class="phase-btn${i===step?' active':''}" onclick="step=${i};render()">${ph.id.replace('m1-','I-').replace('m2-','II-')}</button>`
+  ).join('');
+  const [bgC, txtC] = p.badgeColor.split(':');
+  const badge = document.getElementById('phase-badge');
+  badge.style.cssText = `background:${bgC};color:${txtC};`;
+  badge.textContent = p.badge;
+  document.getElementById('phase-name').textContent = p.name;
+  document.getElementById('phase-desc').textContent = p.desc;
+  const tagsEl = document.getElementById('phase-tags');
+  tagsEl.innerHTML = (p.tags||[]).map(t=>`<span class="tag">${t}</span>`).join('');
+  const tipEl = document.getElementById('phase-tip');
+  if (p.tip) {
+    const [tbg, tclr] = (p.tipColor||'#FAEEDA:#633806').split(':');
+    tipEl.style.cssText = `display:block;border-left-color:${tclr};background:${tbg};color:${tclr};`;
+    tipEl.innerHTML = '<b>考試提醒</b>　' + p.tip;
+  } else { tipEl.style.display='none'; }
+  document.getElementById('step-counter').textContent = `${step+1} / ${phases.length}`;
+  document.getElementById('btn-prev').disabled = step===0;
+  document.getElementById('btn-next').disabled = step===phases.length-1;
+  p.draw();
+}
+
+function clearSVG() {
+  const svg = document.getElementById('cell-svg');
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  return svg;
+}
+
+function makeSVGEl(tag, attrs) {
+  const el = document.createElementNS('http://www.w3.org/2000/svg', tag);
+  Object.entries(attrs).forEach(([k,v])=>el.setAttribute(k,v));
+  return el;
+}
+
+function drawCell(svg, cx, cy, rx, ry, fill, stroke) {
+  const el = makeSVGEl('ellipse',{cx,cy,rx,ry,fill:fill||'#E6F1FB',stroke:stroke||'#378ADD','stroke-width':'1.5'});
+  svg.appendChild(el);
+}
+
+function drawChrom(svg, x, y, w, h, color, sister) {
+  const g = makeSVGEl('g',{});
+  const r = makeSVGEl('rect',{x,y,width:w,height:h,rx:w/2,fill:color,'stroke-width':'0'});
+  g.appendChild(r);
+  if (sister) {
+    const r2 = makeSVGEl('rect',{x:x+w+2,y,width:w,height:h,rx:w/2,fill:color,opacity:'0.7','stroke-width':'0'});
+    g.appendChild(r2);
+    const dot = makeSVGEl('circle',{cx:x+w+1,cy:y+h/2,r:'2',fill:'#444441'});
+    g.appendChild(dot);
+  }
+  svg.appendChild(g);
+}
+
+function addSpindle(svg, cx, cy, topY, botY, color) {
+  color = color||'#888780';
+  const lines = [[cx-30,topY,cx-10,cy],[cx,topY,cx,cy],[cx+30,topY,cx+10,cy],
+                 [cx-30,botY,cx-10,cy],[cx,botY,cx,cy],[cx+30,botY,cx+10,cy]];
+  lines.forEach(([x1,y1,x2,y2])=>{
+    const l = makeSVGEl('line',{x1,y1,x2,y2,stroke:color,'stroke-width':'0.8',opacity:'0.5','stroke-dasharray':'3 2'});
+    svg.appendChild(l);
+  });
+}
+
+function addText(svg, x, y, text, size, color) {
+  const t = makeSVGEl('text',{x,y,'font-size':size||11,'fill':color||'#5F5E5A','text-anchor':'middle','dominant-baseline':'central'});
+  t.textContent = text;
+  svg.appendChild(t);
+}
+
+function drawNucleus(svg, cx, cy, r, color) {
+  const c = makeSVGEl('circle',{cx,cy,r,fill:'none',stroke:color||'#534AB7','stroke-width':'1.2','stroke-dasharray':'4 2'});
+  svg.appendChild(c);
+}
+
+function drawInterphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,120,100,90,'#E6F1FB','#378ADD');
+  drawNucleus(svg,140,120,45,'#534AB7');
+  const dot = makeSVGEl('circle',{cx:140,cy:120,r:10,fill:'#AFA9EC'});
+  svg.appendChild(dot);
+  addText(svg,140,120,'核仁',10,'#3C3489');
+  addText(svg,140,220,'間期：DNA複製完成',11,'#5F5E5A');
+  const cp1 = makeSVGEl('circle',{cx:80,cy:70,r:5,fill:'#1D9E75'});
+  const cp2 = makeSVGEl('circle',{cx:90,cy:70,r:5,fill:'#1D9E75'});
+  svg.appendChild(cp1); svg.appendChild(cp2);
+  addText(svg,85,58,'中心體',9,'#0F6E56');
+}
+
+function drawProphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,120,100,90,'#E6F1FB','#378ADD');
+  [[100,90],[120,80],[145,85],[165,95]].forEach(([x,y])=>
+    drawChrom(svg,x,y,8,28,'#7F77DD',true)
+  );
+  addText(svg,140,215,'前期：染色體凝縮，核膜消失',10,'#5F5E5A');
+  const cp1 = makeSVGEl('circle',{cx:60,cy:50,r:6,fill:'#1D9E75'});
+  const cp2 = makeSVGEl('circle',{cx:220,cy:190,r:6,fill:'#1D9E75'});
+  svg.appendChild(cp1); svg.appendChild(cp2);
+  addText(svg,60,38,'中心體',9,'#0F6E56');
+}
+
+function drawMetaphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,120,100,90,'#E6F1FB','#378ADD');
+  addSpindle(svg,140,120,40,200);
+  const line = makeSVGEl('line',{x1:60,y1:120,x2:220,y2:120,stroke:'#888780','stroke-width':'0.8','stroke-dasharray':'5 3',opacity:'0.6'});
+  svg.appendChild(line);
+  addText(svg,30,120,'赤道板',9,'#888780');
+  [[85,104],[108,104],[132,104],[156,104]].forEach(([x,y])=>
+    drawChrom(svg,x,y,8,28,'#7F77DD',true)
+  );
+  addText(svg,140,218,'中期：染色體排列赤道板',10,'#5F5E5A');
+}
+
+function drawAnaphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,120,100,90,'#E6F1FB','#378ADD');
+  addSpindle(svg,140,120,30,210);
+  [[90,52],[112,52],[134,52],[156,52]].forEach(([x,y])=>
+    drawChrom(svg,x,y,8,22,'#7F77DD',false)
+  );
+  [[90,150],[112,150],[134,150],[156,150]].forEach(([x,y])=>
+    drawChrom(svg,x,y,8,22,'#7F77DD',false)
+  );
+  addText(svg,140,220,'後期：著絲點分裂，染色分體分離',10,'#5F5E5A');
+}
+
+function drawTelophase() {
+  const svg = clearSVG();
+  const el1 = makeSVGEl('ellipse',{cx:100,cy:80,rx:62,ry:52,fill:'#E6F1FB',stroke:'#378ADD','stroke-width':'1.5'});
+  const el2 = makeSVGEl('ellipse',{cx:180,cy:170,rx:62,ry:52,fill:'#E6F1FB',stroke:'#378ADD','stroke-width':'1.5'});
+  svg.appendChild(el1); svg.appendChild(el2);
+  drawNucleus(svg,100,80,28,'#534AB7');
+  drawNucleus(svg,180,170,28,'#534AB7');
+  [[84,66],[100,66],[116,66]].forEach(([x,y])=>drawChrom(svg,x,y,7,20,'#7F77DD',false));
+  [[164,156],[180,156],[196,156]].forEach(([x,y])=>drawChrom(svg,x,y,7,20,'#7F77DD',false));
+  addText(svg,140,230,'末期：2個子細胞（2n），遺傳相同',10,'#5F5E5A');
+}
+
+function drawM1Prophase() {
+  const svg = clearSVG();
+  drawCell(svg,140,115,100,90,'#FAECE7','#D85A30');
+  [[90,80],[114,80]].forEach(([x,y])=>{
+    drawChrom(svg,x,y,8,30,'#D85A30',true);
+  });
+  [[155,80],[179,80]].forEach(([x,y])=>{
+    drawChrom(svg,x,y,8,30,'#534AB7',true);
+  });
+  const line = makeSVGEl('line',{x1:113,y1:95,x2:155,y2:95,stroke:'#E24B4A','stroke-width':'1.5','stroke-dasharray':'3 2'});
+  svg.appendChild(line);
+  addText(svg,134,88,'聯會',9,'#A32D2D');
+  addText(svg,140,215,'前期I：同源染色體聯會，發生互換',10,'#5F5E5A');
+}
+
+function drawM1Metaphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,115,100,90,'#FAECE7','#D85A30');
+  addSpindle(svg,140,115,35,195);
+  const line = makeSVGEl('line',{x1:60,y1:115,x2:220,y2:115,stroke:'#888780','stroke-width':'0.8','stroke-dasharray':'5 3',opacity:'0.6'});
+  svg.appendChild(line);
+  [[96,98],[122,98]].forEach(([x,y])=>drawChrom(svg,x,y,8,28,'#D85A30',true));
+  [[150,98],[176,98]].forEach(([x,y])=>drawChrom(svg,x,y,8,28,'#534AB7',true));
+  addText(svg,140,218,'中期I：同源染色體對排赤道板',10,'#5F5E5A');
+}
+
+function drawM1Anaphase() {
+  const svg = clearSVG();
+  drawCell(svg,140,115,100,90,'#FAECE7','#D85A30');
+  addSpindle(svg,140,115,30,200);
+  [[96,48],[122,48]].forEach(([x,y])=>drawChrom(svg,x,y,8,28,'#D85A30',true));
+  [[150,162],[176,162]].forEach(([x,y])=>drawChrom(svg,x,y,8,28,'#534AB7',true));
+  addText(svg,140,218,'後期I：同源染色體分離，著絲點不裂',10,'#5F5E5A');
+}
+
+function drawM1Telophase() {
+  const svg = clearSVG();
+  const el1 = makeSVGEl('ellipse',{cx:90,cy:80,rx:60,ry:50,fill:'#FAECE7',stroke:'#D85A30','stroke-width':'1.5'});
+  const el2 = makeSVGEl('ellipse',{cx:190,cy:165,rx:60,ry:50,fill:'#E6F1FB',stroke:'#378ADD','stroke-width':'1.5'});
+  svg.appendChild(el1); svg.appendChild(el2);
+  [[76,62],[100,62]].forEach(([x,y])=>drawChrom(svg,x,y,7,24,'#D85A30',true));
+  [[176,147],[200,147]].forEach(([x,y])=>drawChrom(svg,x,y,7,24,'#534AB7',true));
+  addText(svg,140,228,'末期I：2個子細胞（n），含2條染色分體',10,'#5F5E5A');
+}
+
+function drawM2Prophase() {
+  const svg = clearSVG();
+  const el1 = makeSVGEl('ellipse',{cx:80,cy:80,rx:58,ry:50,fill:'#E6F1FB',stroke:'#378ADD','stroke-width':'1.5'});
+  const el2 = makeSVGEl('ellipse',{cx:200,cy:80,rx:58,ry:50,fill:'#FAECE7',stroke:'#D85A30','stroke-width':'1.5'});
+  svg.appendChild(el1); svg.appendChild(el2);
+  [[63,62],[83,62]].forEach(([x,y])=>drawChrom(svg,x,y,7,24,'#534AB7',true));
+  [[183,62],[203,62]].forEach(([x,y])=>drawChrom(svg,x,y,7,24,'#D85A30',true));
+  addText(svg,140,170,'各細胞染色體數 = n',10,'#5F5E5A');
+  addText(svg,140,185,'前期II：開始第二次分裂',10,'#5F5E5A');
+}
+
+function drawM2Anaphase() {
+  const svg = clearSVG();
+  const el1 = makeSVGEl('ellipse',{cx:80,cy:80,rx:58,ry:50,fill:'#E6F1FB',stroke:'#378ADD','stroke-width':'1.5'});
+  const el2 = makeSVGEl('ellipse',{cx:200,cy:80,rx:58,ry:50,fill:'#FAECE7',stroke:'#D85A30','stroke-width':'1.5'});
+  svg.appendChild(el1); svg.appendChild(el2);
+  [[60,54],[78,54]].forEach(([x,y])=>drawChrom(svg,x,y,7,18,'#534AB7',false));
+  [[60,90],[78,90]].forEach(([x,y])=>drawChrom(svg,x,y,7,18,'#AFA9EC',false));
+  [[180,54],[198,54]].forEach(([x,y])=>drawChrom(svg,x,y,7,18,'#D85A30',false));
+  [[180,90],[198,90]].forEach(([x,y])=>drawChrom(svg,x,y,7,18,'#F0997B',false));
+  addText(svg,140,170,'後期II：著絲點分裂，染色分體分離',10,'#5F5E5A');
+}
+
+function drawM2Telophase() {
+  const svg = clearSVG();
+  const pos = [{cx:60,cy:70},{cx:155,cy:70},{cx:60,cy:165},{cx:155,cy:165}];
+  const cols = ['#534AB7','#AFA9EC','#D85A30','#F0997B'];
+  pos.forEach((p,i)=>{
+    const el = makeSVGEl('ellipse',{cx:p.cx,cy:p.cy,rx:45,ry:38,fill:'#E6F1FB',stroke:cols[i],'stroke-width':'1.5'});
+    svg.appendChild(el);
+    drawChrom(svg,p.cx-8,p.cy-12,7,22,cols[i],false);
+    drawChrom(svg,p.cx+4,p.cy-12,7,22,cols[i],false);
+  });
+  addText(svg,210,70,'4個',11,'#5F5E5A');
+  addText(svg,210,85,'子細胞',11,'#5F5E5A');
+  addText(svg,210,100,'（n）',11,'#5F5E5A');
+  addText(svg,107,222,'末期II：4個子細胞，各含n條染色體',10,'#5F5E5A');
+}
+
+render();
+</script>
