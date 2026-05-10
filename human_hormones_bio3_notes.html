@@ -1,0 +1,315 @@
+
+<style>
+*{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font-sans);color:var(--color-text-primary)}
+.wrap{padding:1rem 0}
+.tab-row{display:flex;gap:6px;flex-wrap:wrap;margin-bottom:1.25rem}
+.tab{padding:6px 14px;border-radius:var(--border-radius-md);border:0.5px solid var(--color-border-secondary);font-size:13px;cursor:pointer;background:var(--color-background-primary);color:var(--color-text-secondary);transition:all .15s}
+.tab.active{background:#EEEDFE;color:#3C3489;border-color:#AFA9EC;font-weight:500}
+.panel{display:none}.panel.active{display:block}
+.section-title{font-size:16px;font-weight:500;margin-bottom:12px;color:var(--color-text-primary)}
+.card{background:var(--color-background-primary);border:0.5px solid var(--color-border-tertiary);border-radius:var(--border-radius-lg);padding:1rem 1.25rem;margin-bottom:12px}
+.gland-name{font-size:14px;font-weight:500;margin-bottom:6px;display:flex;align-items:center;gap:8px}
+.badge{font-size:11px;padding:2px 8px;border-radius:20px;font-weight:500}
+.loc{background:#E6F1FB;color:#0C447C}
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:13px}
+th{background:var(--color-background-secondary);padding:8px 10px;text-align:left;font-weight:500;border-bottom:0.5px solid var(--color-border-secondary);color:var(--color-text-secondary)}
+td{padding:8px 10px;border-bottom:0.5px solid var(--color-border-tertiary);vertical-align:top;line-height:1.6}
+tr:last-child td{border-bottom:none}
+.tag{display:inline-block;font-size:11px;padding:1px 7px;border-radius:20px;margin:1px;font-weight:500}
+.t-p{background:#EAF3DE;color:#27500A}
+.t-n{background:#FCEBEB;color:#791F1F}
+.t-s{background:#FAEEDA;color:#633806}
+.feedback-box{border-radius:var(--border-radius-lg);border:0.5px solid var(--color-border-tertiary);padding:1rem 1.25rem;background:var(--color-background-secondary);margin-bottom:12px}
+.arrow{color:var(--color-text-secondary);font-size:18px;margin:0 4px}
+.flow{display:flex;align-items:center;flex-wrap:wrap;gap:4px;font-size:13px;margin:8px 0}
+.flow-box{background:var(--color-background-primary);border:0.5px solid var(--color-border-secondary);border-radius:var(--border-radius-md);padding:5px 10px;font-size:12px}
+.note{font-size:12px;color:var(--color-text-secondary);line-height:1.6;margin-top:8px}
+.disease-row{display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-top:8px}
+.d-card{border-radius:var(--border-radius-md);padding:10px 12px;border:0.5px solid var(--color-border-tertiary)}
+.d-title{font-size:13px;font-weight:500;margin-bottom:4px}
+.d-body{font-size:12px;color:var(--color-text-secondary);line-height:1.5}
+.chip-row{display:flex;flex-wrap:wrap;gap:6px;margin-top:8px}
+.chip{font-size:12px;padding:3px 10px;border-radius:20px;border:0.5px solid var(--color-border-secondary);background:var(--color-background-secondary)}
+h3{font-size:14px;font-weight:500;margin:12px 0 6px;color:var(--color-text-secondary)}
+</style>
+<div class="wrap">
+<h2 class="sr-only">高中選修生物第三冊：人體激素重點筆記</h2>
+<div class="tab-row">
+  <div class="tab active" onclick="switchTab('basic')">基本概念</div>
+  <div class="tab" onclick="switchTab('glands')">腺體與激素</div>
+  <div class="tab" onclick="switchTab('feedback')">負回饋調節</div>
+  <div class="tab" onclick="switchTab('disease')">相關疾病</div>
+  <div class="tab" onclick="switchTab('compare')">比較總整理</div>
+</div>
+
+<div id="basic" class="panel active">
+  <div class="section-title">激素的基本概念</div>
+  <div class="card">
+    <div class="gland-name">什麼是激素（荷爾蒙）？</div>
+    <div style="font-size:13px;line-height:1.8;color:var(--color-text-primary)">
+      由<strong>內分泌腺</strong>分泌，直接進入<strong>血液</strong>運送至全身，作用於特定<strong>標的細胞</strong>（target cell）的化學訊息分子。
+    </div>
+    <div class="chip-row">
+      <div class="chip">微量即有效</div>
+      <div class="chip">不透過導管分泌（無管腺）</div>
+      <div class="chip">透過受體辨識</div>
+      <div class="chip">作用緩慢但持久</div>
+    </div>
+  </div>
+  <div class="card">
+    <div class="gland-name">激素的化學本質分類</div>
+    <table>
+      <tr><th>類型</th><th>例子</th><th>受體位置</th><th>作用方式</th></tr>
+      <tr><td><span class="tag t-p">含氮類（胺基酸衍生物/蛋白質）</span></td><td>腎上腺素、胰島素、生長激素</td><td>細胞膜上</td><td>透過第二信使（cAMP）</td></tr>
+      <tr><td><span class="tag t-s">固醇類</span></td><td>性激素、腎上腺皮質素</td><td>細胞內（細胞質/核）</td><td>直接調控基因轉錄</td></tr>
+    </table>
+  </div>
+  <div class="card">
+    <div class="gland-name">激素 vs. 神經調節 比較</div>
+    <table>
+      <tr><th>特徵</th><th>激素（內分泌）</th><th>神經系統</th></tr>
+      <tr><td>傳遞速度</td><td>慢（隨血液）</td><td>快（電訊號）</td></tr>
+      <tr><td>作用範圍</td><td>廣（全身標的）</td><td>局部（特定器官）</td></tr>
+      <tr><td>持續時間</td><td>長</td><td>短</td></tr>
+      <tr><td>調控方式</td><td>負回饋為主</td><td>反射弧</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="glands" class="panel">
+  <div class="section-title">主要內分泌腺與激素</div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-brain" aria-hidden="true"></i> 下視丘（hypothalamus）<span class="badge loc">大腦底部</span></div>
+    <div class="note" style="margin-bottom:8px">控制中樞，分泌<strong>釋放激素</strong>與<strong>抑制激素</strong>調控腦垂腺前葉</div>
+    <table><tr><th>激素</th><th>作用</th></tr>
+      <tr><td>促性腺素釋放激素（GnRH）</td><td>刺激腦垂腺分泌FSH、LH</td></tr>
+      <tr><td>促甲狀腺素釋放激素（TRH）</td><td>刺激腦垂腺分泌TSH</td></tr>
+      <tr><td>生長激素釋放激素（GHRH）</td><td>刺激腦垂腺分泌GH</td></tr>
+      <tr><td>抗利尿激素（ADH）*</td><td>促腎小管再吸收水分（由後葉釋放）</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-droplet" aria-hidden="true"></i> 腦垂腺（pituitary gland）<span class="badge loc">蝶鞍</span></div>
+    <table><tr><th>分區</th><th>激素</th><th>功能</th></tr>
+      <tr><td rowspan="5">前葉</td><td>生長激素（GH）</td><td>促進骨骼、肌肉生長，刺激細胞分裂</td></tr>
+      <tr><td>促甲狀腺素（TSH）</td><td>刺激甲狀腺分泌甲狀腺素</td></tr>
+      <tr><td>促腎上腺皮質素（ACTH）</td><td>刺激腎上腺皮質分泌皮質醇</td></tr>
+      <tr><td>促卵泡素（FSH）</td><td>促進卵泡發育／精子生成</td></tr>
+      <tr><td>黃體生成素（LH）</td><td>促排卵、促睪固酮分泌</td></tr>
+      <tr><td rowspan="2">後葉*</td><td>抗利尿激素（ADH）</td><td>增加腎小管通透性，減少排尿</td></tr>
+      <tr><td>催產素（oxytocin）</td><td>促子宮收縮、刺激泌乳</td></tr>
+    </table>
+    <div class="note">*後葉本身不製造，由下視丘神經元合成後儲存於此</div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-flame" aria-hidden="true"></i> 甲狀腺（thyroid gland）<span class="badge loc">頸部</span></div>
+    <table><tr><th>激素</th><th>功能</th></tr>
+      <tr><td>甲狀腺素（T₃/T₄）</td><td>提高基礎代謝率、促進生長與發育（兒童期需要正常神經發育）</td></tr>
+      <tr><td>降鈣素（calcitonin）</td><td>降低血鈣（抑制骨鈣釋放，促鈣沉積於骨）</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-activity" aria-hidden="true"></i> 副甲狀腺（parathyroid）<span class="badge loc">甲狀腺後方</span></div>
+    <table><tr><th>激素</th><th>功能</th></tr>
+      <tr><td>副甲狀腺素（PTH）</td><td>升高血鈣（促骨鈣釋放、腎臟再吸收鈣、活化維生素D）</td></tr>
+    </table>
+    <div class="note">→ 降鈣素 vs. PTH：互為拮抗作用，共同維持血鈣恆定</div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-bolt" aria-hidden="true"></i> 腎上腺（adrenal gland）<span class="badge loc">腎臟上方</span></div>
+    <table><tr><th>分區</th><th>激素</th><th>功能</th></tr>
+      <tr><td>皮質</td><td>糖皮質素（cortisol）</td><td>升血糖、抗發炎、應激反應</td></tr>
+      <tr><td>皮質</td><td>礦皮質素（aldosterone）</td><td>促腎小管再吸收Na⁺（→水分留存→升血壓）</td></tr>
+      <tr><td>髓質</td><td>腎上腺素（epinephrine）</td><td>「戰或逃」：心跳↑、血糖↑、支氣管擴張</td></tr>
+      <tr><td>髓質</td><td>正腎上腺素（norepinephrine）</td><td>血管收縮、血壓↑</td></tr>
+    </table>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-layout-grid" aria-hidden="true"></i> 胰臟（pancreas islets of Langerhans）<span class="badge loc">腹腔</span></div>
+    <table><tr><th>細胞</th><th>激素</th><th>功能</th></tr>
+      <tr><td>α細胞</td><td>升糖素（glucagon）</td><td>升高血糖（促肝糖分解、糖質新生）</td></tr>
+      <tr><td>β細胞</td><td>胰島素（insulin）</td><td>降低血糖（促細胞攝取葡萄糖、肝糖合成）</td></tr>
+    </table>
+    <div class="note">→ 升糖素 vs. 胰島素：拮抗作用，共同維持血糖恆定（正常空腹血糖 70–100 mg/dL）</div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name"><i class="ti ti-gender-male" aria-hidden="true"></i><i class="ti ti-gender-female" aria-hidden="true"></i> 性腺（gonads）</div>
+    <table><tr><th>器官</th><th>激素</th><th>功能</th></tr>
+      <tr><td>睪丸</td><td>睪固酮（testosterone）</td><td>促進男性第二性徵、精子生成</td></tr>
+      <tr><td>卵巢</td><td>雌激素（estrogen）</td><td>促進女性第二性徵、子宮內膜增厚</td></tr>
+      <tr><td>卵巢（黃體）</td><td>黃體素（progesterone）</td><td>維持子宮內膜、抑制排卵</td></tr>
+    </table>
+  </div>
+</div>
+
+<div id="feedback" class="panel">
+  <div class="section-title">負回饋調節（negative feedback）</div>
+  <div class="card">
+    <div class="gland-name">核心概念</div>
+    <div style="font-size:13px;line-height:1.8">當血中激素濃度<strong>過高</strong>時，會抑制上游腺體繼續分泌，使濃度下降回正常範圍。大多數激素系統都透過此機制維持恆定。</div>
+  </div>
+
+  <div class="feedback-box">
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px">下視丘－腦垂腺－甲狀腺軸（HPT axis）</div>
+    <div class="flow">
+      <div class="flow-box">下視丘<br><span style="font-size:11px;color:var(--color-text-secondary)">分泌 TRH</span></div>
+      <span class="arrow">→</span>
+      <div class="flow-box">腦垂腺前葉<br><span style="font-size:11px;color:var(--color-text-secondary)">分泌 TSH</span></div>
+      <span class="arrow">→</span>
+      <div class="flow-box">甲狀腺<br><span style="font-size:11px;color:var(--color-text-secondary)">分泌 T₃/T₄</span></div>
+    </div>
+    <div style="font-size:12px;color:#A32D2D;margin-top:8px">⤶ T₃/T₄濃度高 → 抑制下視丘分泌TRH 及 腦垂腺分泌TSH（負回饋）</div>
+  </div>
+
+  <div class="feedback-box">
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px">血糖調節負回饋</div>
+    <div class="flow">
+      <div class="flow-box">飯後血糖↑</div>
+      <span class="arrow">→</span>
+      <div class="flow-box">β細胞分泌胰島素↑</div>
+      <span class="arrow">→</span>
+      <div class="flow-box">血糖↓</div>
+    </div>
+    <div style="font-size:12px;color:#27500A;margin-top:6px">→ 血糖恢復正常後，胰島素分泌受到抑制</div>
+    <div class="flow" style="margin-top:8px">
+      <div class="flow-box">空腹血糖↓</div>
+      <span class="arrow">→</span>
+      <div class="flow-box">α細胞分泌升糖素↑</div>
+      <span class="arrow">→</span>
+      <div class="flow-box">血糖↑</div>
+    </div>
+  </div>
+
+  <div class="feedback-box">
+    <div style="font-size:13px;font-weight:500;margin-bottom:10px">血鈣調節（拮抗）</div>
+    <div style="display:grid;grid-template-columns:1fr 1fr;gap:10px;font-size:12px">
+      <div>
+        <div style="font-weight:500;margin-bottom:4px;color:#0C447C">血鈣↓ 時</div>
+        <div style="line-height:1.7">副甲狀腺素（PTH）↑<br>→ 骨鈣釋放 ↑<br>→ 腎臟再吸收Ca²⁺ ↑<br>→ 血鈣升高</div>
+      </div>
+      <div>
+        <div style="font-weight:500;margin-bottom:4px;color:#A32D2D">血鈣↑ 時</div>
+        <div style="line-height:1.7">降鈣素（calcitonin）↑<br>→ 骨鈣沉積 ↑<br>→ 腎臟排鈣 ↑<br>→ 血鈣降低</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="disease" class="panel">
+  <div class="section-title">常見激素相關疾病</div>
+
+  <div class="card">
+    <div class="gland-name">生長激素（GH）異常</div>
+    <div class="disease-row">
+      <div class="d-card" style="border-color:#B5D4F4">
+        <div class="d-title" style="color:#0C447C">幼年期分泌不足</div>
+        <div class="d-body">侏儒症（pituitary dwarfism）：身高矮小，智力正常</div>
+      </div>
+      <div class="d-card" style="border-color:#F5C4B3">
+        <div class="d-title" style="color:#A32D2D">幼年期分泌過多</div>
+        <div class="d-body">巨人症（gigantism）：骨骼快速過度生長</div>
+      </div>
+      <div class="d-card" style="border-color:#F5C4B3">
+        <div class="d-title" style="color:#A32D2D">成年期分泌過多</div>
+        <div class="d-body">肢端肥大症（acromegaly）：手腳、臉部骨骼增大（長骨不再生長）</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name">甲狀腺激素異常</div>
+    <div class="disease-row">
+      <div class="d-card" style="border-color:#F5C4B3">
+        <div class="d-title" style="color:#A32D2D">甲狀腺素過多（甲亢）</div>
+        <div class="d-body">基礎代謝率↑、心跳加速、體重減輕、突眼（葛瑞夫茲病）</div>
+      </div>
+      <div class="d-card" style="border-color:#B5D4F4">
+        <div class="d-title" style="color:#0C447C">甲狀腺素不足（甲減）</div>
+        <div class="d-body">幼年：呆小症（cretinism）智力低下；成年：黏液水腫、代謝緩慢</div>
+      </div>
+      <div class="d-card" style="border-color:#FAC775">
+        <div class="d-title" style="color:#633806">缺碘</div>
+        <div class="d-body">甲狀腺腫大（goiter）：TSH↑持續刺激甲狀腺增生</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name">胰島素相關</div>
+    <div class="disease-row">
+      <div class="d-card" style="border-color:#F5C4B3">
+        <div class="d-title" style="color:#A32D2D">第一型糖尿病</div>
+        <div class="d-body">自體免疫破壞β細胞 → 胰島素完全缺乏，需注射胰島素</div>
+      </div>
+      <div class="d-card" style="border-color:#FAC775">
+        <div class="d-title" style="color:#633806">第二型糖尿病</div>
+        <div class="d-body">細胞對胰島素阻抗 → 血糖調節失效，與肥胖、飲食相關</div>
+      </div>
+    </div>
+    <div class="note" style="margin-top:8px">→ 症狀：多尿（osmotic diuresis）、多渴、多食、體重下降</div>
+  </div>
+
+  <div class="card">
+    <div class="gland-name">ADH 異常</div>
+    <div class="disease-row">
+      <div class="d-card" style="border-color:#B5D4F4">
+        <div class="d-title" style="color:#0C447C">ADH 不足</div>
+        <div class="d-body">尿崩症（diabetes insipidus）：大量低濃度尿液，極度口渴</div>
+      </div>
+      <div class="d-card" style="border-color:#F5C4B3">
+        <div class="d-title" style="color:#A32D2D">ADH 過多（SIADH）</div>
+        <div class="d-body">水分滯留、血鈉降低（低血鈉），水中毒症狀</div>
+      </div>
+    </div>
+  </div>
+</div>
+
+<div id="compare" class="panel">
+  <div class="section-title">拮抗激素對照表</div>
+  <div class="table-wrap">
+  <table>
+    <tr><th>調控目標</th><th>升高的激素</th><th>降低的激素</th></tr>
+    <tr><td>血糖</td><td><span class="tag t-s">升糖素（α細胞）</span></td><td><span class="tag t-p">胰島素（β細胞）</span></td></tr>
+    <tr><td>血鈣</td><td><span class="tag t-s">副甲狀腺素（PTH）</span></td><td><span class="tag t-p">降鈣素（甲狀腺）</span></td></tr>
+    <tr><td>水分（尿量）</td><td><span class="tag t-s">ADH（保水）</span></td><td><span class="tag t-n">醛固酮輔助保Na⁺</span></td></tr>
+  </table>
+  </div>
+
+  <div class="section-title" style="margin-top:16px">重要考試記憶口訣</div>
+  <div class="card">
+    <h3>腦垂腺前葉六大激素</h3>
+    <div class="note">GH、TSH、ACTH、FSH、LH、泌乳素（prolactin）<br>→ 口訣：「生（GH）促（TSH）腎（ACTH），卵（FSH）黃（LH）泌（PRL）」</div>
+  </div>
+  <div class="card">
+    <h3>胰島細胞分工</h3>
+    <div class="note">A（α）= 升糖素（A 是 Above → 升高）<br>B（β）= 胰島素（B 是 Below → 降低）</div>
+  </div>
+  <div class="card">
+    <h3>腎上腺皮質 vs. 髓質</h3>
+    <div class="note">皮質 = 固醇類激素（糖皮質素、礦皮質素）<br>髓質 = 含氮類（腎上腺素、正腎上腺素）→ 受交感神經支配</div>
+  </div>
+  <div class="card">
+    <h3>甲狀腺 vs. 副甲狀腺</h3>
+    <div class="note">甲狀腺：調代謝（T₃/T₄）＋ 降血鈣（降鈣素）<br>副甲狀腺：只管血鈣（PTH → 升鈣）</div>
+  </div>
+</div>
+</div>
+
+<script>
+function switchTab(id){
+  document.querySelectorAll('.tab').forEach((t,i)=>t.classList.remove('active'));
+  document.querySelectorAll('.panel').forEach(p=>p.classList.remove('active'));
+  document.getElementById(id).classList.add('active');
+  const tabs=['basic','glands','feedback','disease','compare'];
+  document.querySelectorAll('.tab')[tabs.indexOf(id)].classList.add('active');
+}
+</script>
