@@ -1,0 +1,273 @@
+
+<style>
+  .section-title { font-size: 16px; font-weight: 500; color: var(--color-text-primary); margin: 18px 0 10px; }
+  .card-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(260px, 1fr)); gap: 12px; margin-bottom: 8px; }
+  .card { border-radius: 12px; padding: 14px 16px; border: 0.5px solid; }
+  .card-title { font-size: 14px; font-weight: 500; margin-bottom: 4px; }
+  .card-sub { font-size: 12px; line-height: 1.6; }
+  .badge { display: inline-block; font-size: 11px; font-weight: 500; border-radius: 6px; padding: 2px 8px; margin-bottom: 7px; }
+  .mem { background: #E6F1FB; border-color: #185FA5; }
+  .mem .badge { background: #B5D4F4; color: #0C447C; }
+  .mem .card-title { color: #0C447C; }
+  .mem .card-sub { color: #185FA5; }
+  .single { background: #EAF3DE; border-color: #3B6D11; }
+  .single .badge { background: #C0DD97; color: #27500A; }
+  .single .card-title { color: #27500A; }
+  .single .card-sub { color: #3B6D11; }
+  .double { background: #E6F1FB; border-color: #185FA5; }
+  .double .badge { background: #B5D4F4; color: #0C447C; }
+  .double .card-title { color: #0C447C; }
+  .double .card-sub { color: #185FA5; }
+  .nonmem { background: #FAEEDA; border-color: #854F0B; }
+  .nonmem .badge { background: #FAC775; color: #633806; }
+  .nonmem .card-title { color: #633806; }
+  .nonmem .card-sub { color: #854F0B; }
+  .tag-row { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 6px; }
+  .tag { font-size: 11px; border-radius: 4px; padding: 2px 6px; }
+  .tag-a { background: #E6F1FB; color: #185FA5; }
+  .tag-p { background: #E1F5EE; color: #0F6E56; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 16px 0; }
+  .legend-row { display: flex; gap: 16px; flex-wrap: wrap; margin-bottom: 14px; font-size: 12px; color: var(--color-text-secondary); align-items: center; }
+  .legend-dot { width: 10px; height: 10px; border-radius: 3px; display: inline-block; margin-right: 4px; vertical-align: middle; }
+  @media (prefers-color-scheme: dark) {
+    .mem  { background: #0c447c; border-color: #378ADD; }
+    .mem .badge  { background: #185FA5; color: #B5D4F4; }
+    .mem .card-title  { color: #B5D4F4; }
+    .mem .card-sub  { color: #85B7EB; }
+    .single { background: #173404; border-color: #639922; }
+    .single .badge { background: #3B6D11; color: #C0DD97; }
+    .single .card-title { color: #C0DD97; }
+    .single .card-sub { color: #97C459; }
+    .double { background: #042C53; border-color: #378ADD; }
+    .double .badge { background: #0C447C; color: #85B7EB; }
+    .double .card-title { color: #85B7EB; }
+    .double .card-sub { color: #378ADD; }
+    .nonmem { background: #412402; border-color: #BA7517; }
+    .nonmem .badge { background: #854F0B; color: #FAC775; }
+    .nonmem .card-title { color: #FAC775; }
+    .nonmem .card-sub { color: #EF9F27; }
+    .tag-a { background: #042C53; color: #85B7EB; }
+    .tag-p { background: #04342C; color: #5DCAA5; }
+  }
+</style>
+<h2 class="sr-only" style="position:absolute;left:-9999px">高中生物：膜狀胞器與非膜狀胞器整理筆記</h2>
+<div style="padding: 16px 4px 8px">
+
+  <div class="legend-row">
+    <span><span class="legend-dot" style="background:#378ADD"></span>動物＋植物皆有</span>
+    <span><span class="legend-dot" style="background:#639922"></span>植物（或特定生物）限定</span>
+    <span><span class="legend-dot" style="background:#EF9F27"></span>非膜狀胞器</span>
+  </div>
+
+  <!-- 膜狀胞器 -->
+  <div class="section-title">🔵 膜狀胞器（Membranous Organelles）</div>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">由磷脂雙層膜所包圍，維持胞器內環境的獨立性。</p>
+
+  <div style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:8px 0 6px">● 單層膜胞器</div>
+  <div class="card-grid">
+
+    <div class="card single">
+      <span class="badge">單層膜</span>
+      <div class="card-title">內質網（Endoplasmic Reticulum, ER）</div>
+      <div class="card-sub">
+        <b>粗糙內質網（RER）</b>：表面有核糖體，負責合成分泌性蛋白質與膜蛋白。<br>
+        <b>平滑內質網（SER）</b>：無核糖體，負責脂質合成、解毒、Ca²⁺ 調節。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+    <div class="card single">
+      <span class="badge">單層膜</span>
+      <div class="card-title">高基氏體（Golgi Apparatus）</div>
+      <div class="card-sub">
+        接收來自 RER 的蛋白質，進行修飾（醣化等）、分類與包裝，最終以囊泡分泌到細胞外或送至溶小體。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+    <div class="card single">
+      <span class="badge">單層膜</span>
+      <div class="card-title">溶小體（Lysosome）</div>
+      <div class="card-sub">
+        含多種水解酶（酸性環境，pH ≈ 5），負責細胞內消化：分解老化胞器（自噬作用）、外來物質及吞入的食物。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物為主</span></div>
+    </div>
+
+    <div class="card single">
+      <span class="badge">單層膜</span>
+      <div class="card-title">液胞 / 液泡（Vacuole）</div>
+      <div class="card-sub">
+        植物中央液泡：儲存色素、廢物、調節滲透壓、支持細胞（膨壓）。<br>
+        動物中食泡、收縮泡功能各異。
+      </div>
+      <div class="tag-row"><span class="tag tag-p">植物（中央液泡）</span><span class="tag tag-a">動物</span></div>
+    </div>
+
+    <div class="card single">
+      <span class="badge">單層膜</span>
+      <div class="card-title">過氧化體（Peroxisome）</div>
+      <div class="card-sub">
+        含過氧化氫酶，氧化分解脂肪酸與氨基酸，同時分解代謝過程中產生的有毒 H₂O₂。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+  <div style="font-size:13px;font-weight:500;color:var(--color-text-secondary);margin:8px 0 6px">● 雙層膜胞器</div>
+  <div class="card-grid">
+
+    <div class="card double">
+      <span class="badge">雙層膜</span>
+      <div class="card-title">粒線體（Mitochondria）</div>
+      <div class="card-sub">
+        細胞呼吸的主要場所，產生大量 ATP。<br>
+        外膜：平滑；內膜：向內折疊形成<b>嵴（cristae）</b>，擴大表面積。<br>
+        基質（matrix）內進行克式循環，嵴上進行電子傳遞鏈。<br>
+        含有自身 DNA 與核糖體（70S）→ 內共生說的證據。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+    <div class="card double">
+      <span class="badge">雙層膜</span>
+      <div class="card-title">葉綠體（Chloroplast）</div>
+      <div class="card-sub">
+        行光合作用。<br>
+        <b>類囊體（thylakoid）</b>：光反應，含光合色素，堆疊成葉綠餅（granum）。<br>
+        <b>基質（stroma）</b>：暗反應（卡爾文循環）。<br>
+        同樣含 DNA 與 70S 核糖體。
+      </div>
+      <div class="tag-row"><span class="tag tag-p">植物 / 藻類</span></div>
+    </div>
+
+    <div class="card double">
+      <span class="badge">雙層膜</span>
+      <div class="card-title">細胞核（Nucleus）</div>
+      <div class="card-sub">
+        儲存遺傳物質（DNA）並控制細胞活動。<br>
+        <b>核膜</b>：雙層膜，有核孔（nuclear pore）調控物質進出。<br>
+        <b>核仁（nucleolus）</b>：合成 rRNA，無膜。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- 非膜狀胞器 -->
+  <div class="section-title">🟡 非膜狀胞器（Non-membranous Organelles）</div>
+  <p style="font-size:12px;color:var(--color-text-secondary);margin-bottom:10px">不具磷脂雙層膜，直接暴露於細胞質中或與其他結構相連。</p>
+  <div class="card-grid">
+
+    <div class="card nonmem">
+      <span class="badge">非膜狀</span>
+      <div class="card-title">核糖體（Ribosome）</div>
+      <div class="card-sub">
+        蛋白質合成場所，由 rRNA 與蛋白質組成。<br>
+        真核：<b>80S</b>（大次單元 60S + 小次單元 40S）<br>
+        原核 / 粒線體 / 葉綠體：<b>70S</b>（50S + 30S）<br>
+        可附著於 RER 或游離於細胞質。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+    <div class="card nonmem">
+      <span class="badge">非膜狀</span>
+      <div class="card-title">中心體（Centrosome）</div>
+      <div class="card-sub">
+        由兩個互相垂直的<b>中心粒（centriole）</b>構成。<br>
+        細胞分裂時形成紡錘絲，主導染色體移動。<br>
+        也是纖毛、鞭毛的組裝起點（MTOC）。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物為主（大多數高等植物無）</span></div>
+    </div>
+
+    <div class="card nonmem">
+      <span class="badge">非膜狀</span>
+      <div class="card-title">細胞骨架（Cytoskeleton）</div>
+      <div class="card-sub">
+        維持細胞形態與內部運輸。<br>
+        <b>微絲（actin filament）</b>：細胞移動、胞質分裂。<br>
+        <b>中間絲（intermediate filament）</b>：結構支撐。<br>
+        <b>微管（microtubule）</b>：紡錘絲、胞器移動軌道。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">植物</span></div>
+    </div>
+
+    <div class="card nonmem">
+      <span class="badge">非膜狀</span>
+      <div class="card-title">纖毛與鞭毛（Cilia & Flagella）</div>
+      <div class="card-sub">
+        由微管（9+2 排列）構成，負責細胞移動或推動液體流動。<br>
+        纖毛較短且多；鞭毛較長，數量少。
+      </div>
+      <div class="tag-row"><span class="tag tag-a">動物</span><span class="tag tag-p">部分植物精細胞</span></div>
+    </div>
+
+  </div>
+
+  <hr class="divider">
+
+  <!-- 快速比較 -->
+  <div class="section-title">📊 快速比較：動物 vs 植物細胞</div>
+  <div style="overflow-x:auto">
+  <table style="width:100%;border-collapse:collapse;font-size:12px;color:var(--color-text-primary)">
+    <thead>
+      <tr style="background:var(--color-background-secondary);border-bottom:1px solid var(--color-border-primary)">
+        <th style="text-align:left;padding:8px 10px;font-weight:500">胞器</th>
+        <th style="padding:8px 10px;font-weight:500">動物細胞</th>
+        <th style="padding:8px 10px;font-weight:500">植物細胞</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+        <td style="padding:7px 10px">細胞壁</td>
+        <td style="padding:7px 10px;text-align:center">✗</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+      </tr>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)">
+        <td style="padding:7px 10px">葉綠體</td>
+        <td style="padding:7px 10px;text-align:center">✗</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+      </tr>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+        <td style="padding:7px 10px">中央液泡</td>
+        <td style="padding:7px 10px;text-align:center">✗（小食泡）</td>
+        <td style="padding:7px 10px;text-align:center">✓（大型）</td>
+      </tr>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)">
+        <td style="padding:7px 10px">中心體</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+        <td style="padding:7px 10px;text-align:center">✗（多數）</td>
+      </tr>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary)">
+        <td style="padding:7px 10px">粒線體</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+      </tr>
+      <tr style="border-bottom:0.5px solid var(--color-border-tertiary);background:var(--color-background-secondary)">
+        <td style="padding:7px 10px">溶小體</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+        <td style="padding:7px 10px;text-align:center">✗（通常）</td>
+      </tr>
+      <tr>
+        <td style="padding:7px 10px">核糖體（80S）</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+        <td style="padding:7px 10px;text-align:center">✓</td>
+      </tr>
+    </tbody>
+  </table>
+  </div>
+
+  <div style="margin-top:16px;padding:12px 14px;border-radius:10px;background:var(--color-background-secondary);border-left:3px solid #378ADD;font-size:12px;color:var(--color-text-secondary);line-height:1.7">
+    💡 <b>考試重點提醒</b><br>
+    • 粒線體與葉綠體具 <b>70S 核糖體</b> 與 <b>環狀 DNA</b>，為內共生說（Endosymbiotic theory）的重要證據。<br>
+    • <b>核仁</b>本身無膜，但位於細胞核（雙層膜）內，容易混淆。<br>
+    • 蛋白質分泌路徑：核糖體（RER）→ 高基氏體 → 分泌囊泡 → 細胞膜外。
+  </div>
+
+</div>
