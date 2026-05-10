@@ -1,0 +1,456 @@
+
+<style>
+  .tab-btn { background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 16px; font-size: 13px; cursor: pointer; color: var(--color-text-secondary); transition: all .2s; }
+  .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); font-weight: 500; }
+  .tab-btn:hover:not(.active) { background: var(--color-background-secondary); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: var(--border-radius-md); font-weight: 500; margin-right: 6px; }
+  .tag-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .tag-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .tag-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .tag-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .tag-purple { background: #EEEDFE; color: #3C3489; }
+  .grid2 { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .grid3 { display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 10px; }
+  .mini { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 3px; }
+  .val { font-size: 14px; font-weight: 500; }
+  .eq { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
+  .step-row { display: flex; align-items: flex-start; margin-bottom: 10px; font-size: 13px; line-height: 1.6; }
+  .step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; font-size: 12px; font-weight: 500; margin-right: 10px; flex-shrink: 0; }
+  .num-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .num-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .num-purple { background: #EEEDFE; color: #3C3489; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 10px 0; }
+  .alert-blue { background: var(--color-background-info); border: 0.5px solid var(--color-border-info); border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: var(--color-text-info); margin-top: 8px; }
+  .alert-amber { background: var(--color-background-warning); border: 0.5px solid var(--color-border-warning); border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: var(--color-text-warning); margin-top: 8px; }
+  .compare-header { font-size: 13px; font-weight: 500; padding: 8px 12px; border-radius: var(--border-radius-md) var(--border-radius-md) 0 0; }
+  .enzyme-card { border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-md); padding: 10px 12px; margin-bottom: 8px; }
+  .enzyme-name { font-size: 13px; font-weight: 500; margin-bottom: 3px; }
+  .enzyme-fn { font-size: 12px; color: var(--color-text-secondary); line-height: 1.5; }
+  .base-pair { display: flex; align-items: center; gap: 6px; font-size: 13px; margin-bottom: 6px; }
+  .base { display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; border-radius: 6px; font-weight: 500; font-size: 13px; }
+</style>
+
+<div style="padding: 1rem 0 0;">
+  <div style="display:flex; align-items:center; justify-content:space-between; margin-bottom:16px; flex-wrap:wrap; gap:8px;">
+    <div>
+      <div style="font-size:18px; font-weight:500;">DNA 複製 ＆ RNA 轉錄筆記</div>
+      <div style="font-size:12px; color:var(--color-text-secondary); margin-top:2px;">DNA Replication & Transcription</div>
+    </div>
+    <div style="display:flex; gap:6px;">
+      <span class="tag tag-blue">原核 / 真核</span>
+      <span class="tag tag-green">半保留複製</span>
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:16px;">
+    <button class="tab-btn active" onclick="go('overview')">總覽比較</button>
+    <button class="tab-btn" onclick="go('dna')">DNA 複製</button>
+    <button class="tab-btn" onclick="go('rna')">RNA 轉錄</button>
+    <button class="tab-btn" onclick="go('enzyme')">酵素速查</button>
+    <button class="tab-btn" onclick="go('base')">鹼基配對</button>
+    <button class="tab-btn" onclick="go('exam')">考試重點</button>
+  </div>
+
+  <!-- ===== 總覽 ===== -->
+  <div class="tab-panel active" id="tab-overview">
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:10px;">DNA 複製 vs RNA 轉錄 — 一眼看差異</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <th style="text-align:left; padding:7px 8px; font-weight:500; color:var(--color-text-secondary); width:22%;">比較項目</th>
+            <th style="text-align:center; padding:7px 8px; font-weight:500; background:var(--color-background-info); color:var(--color-text-info); border-radius:6px 0 0 0;">DNA 複製</th>
+            <th style="text-align:center; padding:7px 8px; font-weight:500; background:var(--color-background-success); color:var(--color-text-success); border-radius:0 6px 0 0;">RNA 轉錄</th>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">目的</td>
+            <td style="text-align:center; padding:7px 8px;">複製完整基因組</td>
+            <td style="text-align:center; padding:7px 8px;">合成 RNA（mRNA/tRNA/rRNA）</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">模板</td>
+            <td style="text-align:center; padding:7px 8px;">雙股 DNA 全部</td>
+            <td style="text-align:center; padding:7px 8px;">模板股（Template strand）</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">產物</td>
+            <td style="text-align:center; padding:7px 8px;">2 個子代 DNA</td>
+            <td style="text-align:center; padding:7px 8px;">1 條 RNA 分子</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">原料</td>
+            <td style="text-align:center; padding:7px 8px;">dNTP（四種去氧核苷酸）</td>
+            <td style="text-align:center; padding:7px 8px;">NTP（四種核糖核苷酸）</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">關鍵酵素</td>
+            <td style="text-align:center; padding:7px 8px;">DNA 聚合酶（需引子）</td>
+            <td style="text-align:center; padding:7px 8px;">RNA 聚合酶（不需引子）</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">方向性</td>
+            <td style="text-align:center; padding:7px 8px;">5' → 3' 合成</td>
+            <td style="text-align:center; padding:7px 8px;">5' → 3' 合成</td>
+          </tr>
+          <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">發生時期</td>
+            <td style="text-align:center; padding:7px 8px;">細胞週期 S 期</td>
+            <td style="text-align:center; padding:7px 8px;">隨時（需要時）</td>
+          </tr>
+          <tr>
+            <td style="padding:7px 8px; color:var(--color-text-secondary);">位置</td>
+            <td style="text-align:center; padding:7px 8px;">細胞核（原核：細胞質）</td>
+            <td style="text-align:center; padding:7px 8px;">細胞核（原核：細胞質）</td>
+          </tr>
+        </table>
+      </div>
+    </div>
+    <div class="grid2">
+      <div class="card" onclick="go('dna')" style="cursor:pointer; border-color:var(--color-border-info);">
+        <span class="tag tag-blue">DNA 複製</span>
+        <div style="font-size:14px; font-weight:500; margin:8px 0 4px;">半保留複製</div>
+        <div class="eq">雙股分開 → 各作模板<br>產出 2 個一樣的子代 DNA</div>
+        <div style="font-size:12px; color:var(--color-text-info); margin-top:8px;">點此查看詳細 →</div>
+      </div>
+      <div class="card" onclick="go('rna')" style="cursor:pointer; border-color:var(--color-border-success);">
+        <span class="tag tag-green">RNA 轉錄</span>
+        <div style="font-size:14px; font-weight:500; margin:8px 0 4px;">基因表現第一步</div>
+        <div class="eq">DNA 模板股 → mRNA<br>原核 vs 真核流程有差異</div>
+        <div style="font-size:12px; color:var(--color-text-success); margin-top:8px;">點此查看詳細 →</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== DNA 複製 ===== -->
+  <div class="tab-panel" id="tab-dna">
+    <div class="card">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <span class="tag tag-blue">半保留複製</span>
+        <span class="tag tag-blue">5'→3' 方向</span>
+        <span class="tag tag-amber">需要 RNA 引子</span>
+      </div>
+      <div class="mini">核心原則</div>
+      <div style="font-size:14px; font-weight:500; margin-bottom:4px;">半保留複製（Semi-conservative replication）</div>
+      <div class="eq" style="margin-bottom:0;">每個子代 DNA 保留一股親代 DNA + 一股新合成 DNA</div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">複製流程（三大步驟）</div>
+
+      <div class="step-row">
+        <span class="step-num num-blue">1</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">起始（Initiation）</div>
+          <div class="eq">辨認複製起始點（Origin of replication, ori）→ 解旋酶（Helicase）打開雙股 → 形成複製叉（Replication fork）→ SSB 蛋白穩定單股 → 引子酶（Primase）合成 RNA 引子</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-blue">2</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">延長（Elongation）— 核心差異在此！</div>
+          <div class="eq">DNA 聚合酶只能 5'→3' 合成，因此兩股合成方式不同：</div>
+          <div style="margin-top:8px; padding:10px 12px; background:var(--color-background-secondary); border-radius:var(--border-radius-md);">
+            <div style="margin-bottom:8px;"><span style="font-weight:500; color:var(--color-text-info);">前導股（Leading strand）</span><br><span class="eq">沿複製叉方向連續合成，一口氣完成 ✓</span></div>
+            <div><span style="font-weight:500; color:var(--color-text-warning);">滯後股（Lagging strand）</span><br><span class="eq">方向相反，分段合成多個岡崎片段（Okazaki fragments）→ 每段需個別引子 → DNA 聚合酶 I 移除引子 → DNA 連接酶（Ligase）封口</span></div>
+          </div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-blue">3</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">終止（Termination）</div>
+          <div class="eq">兩個複製叉相遇 → 移除所有 RNA 引子 → DNA 連接酶連接缺口 → 形成完整子代 DNA</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:10px;">原核 vs 真核 DNA 複製差異</div>
+      <table style="width:100%; font-size:13px; border-collapse:collapse;">
+        <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+          <th style="text-align:left; padding:6px 4px; font-weight:500; color:var(--color-text-secondary);">項目</th>
+          <th style="text-align:center; padding:6px 4px; font-weight:500; color:var(--color-text-warning);">原核生物</th>
+          <th style="text-align:center; padding:6px 4px; font-weight:500; color:var(--color-text-info);">真核生物</th>
+        </tr>
+        <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+          <td style="padding:6px 4px; color:var(--color-text-secondary);">複製起點數</td>
+          <td style="text-align:center; padding:6px 4px;">1 個（單一 ori）</td>
+          <td style="text-align:center; padding:6px 4px;">多個（加速複製）</td>
+        </tr>
+        <tr style="border-bottom:0.5px solid var(--color-border-tertiary);">
+          <td style="padding:6px 4px; color:var(--color-text-secondary);">染色體</td>
+          <td style="text-align:center; padding:6px 4px;">環狀（無端粒問題）</td>
+          <td style="text-align:center; padding:6px 4px;">線狀（端粒保護末端）</td>
+        </tr>
+        <tr>
+          <td style="padding:6px 4px; color:var(--color-text-secondary);">DNA 聚合酶</td>
+          <td style="text-align:center; padding:6px 4px;">Pol I、Pol III</td>
+          <td style="text-align:center; padding:6px 4px;">α、δ、ε 等多種</td>
+        </tr>
+      </table>
+    </div>
+    <div class="alert-amber">⚠️ DNA 聚合酶沒有「從頭合成」能力 → 必須先由引子酶合成 RNA 引子當起始點！</div>
+  </div>
+
+  <!-- ===== RNA 轉錄 ===== -->
+  <div class="tab-panel" id="tab-rna">
+    <div class="card">
+      <div style="display:flex; gap:8px; flex-wrap:wrap; margin-bottom:12px;">
+        <span class="tag tag-green">DNA → RNA</span>
+        <span class="tag tag-green">中心法則第一步</span>
+        <span class="tag tag-purple">不需要引子</span>
+      </div>
+      <div class="mini">核心原則</div>
+      <div style="font-size:14px; font-weight:500; margin-bottom:4px;">轉錄（Transcription）</div>
+      <div class="eq">以 DNA 模板股（3'→5' 讀取方向）為模板，RNA 聚合酶依 5'→3' 方向合成 RNA</div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">轉錄流程（三大步驟）</div>
+      <div class="step-row">
+        <span class="step-num num-green">1</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">起始（Initiation）</div>
+          <div class="eq">RNA 聚合酶辨認並結合啟動子（Promoter）序列 → 解開雙股 DNA → 開始合成 RNA</div>
+          <div class="eq" style="margin-top:4px; font-style:italic;">原核：σ 因子輔助辨認啟動子（-10 及 -35 區域）<br>真核：需多種轉錄因子（TF）先結合 TATA box</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-green">2</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">延長（Elongation）</div>
+          <div class="eq">RNA 聚合酶沿模板股移動 → 依鹼基互補配對合成 RNA → DNA 隨後重新配對還原</div>
+          <div class="eq" style="margin-top:4px; font-style:italic;">T（DNA）↔ A（RNA）｜A（DNA）↔ U（RNA）｜G ↔ C</div>
+        </div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-green">3</span>
+        <div>
+          <div style="font-weight:500; margin-bottom:2px;">終止（Termination）</div>
+          <div class="eq">原核：遇到終止序列（髮夾結構 + U 串）→ RNA 聚合酶脫落<br>真核：遇到多腺苷化信號（AAUAAA）→ RNA 切割並加 poly-A 尾</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:10px;">真核生物 RNA 轉錄後加工（Post-transcriptional processing）</div>
+      <div class="step-row">
+        <span class="step-num num-purple">A</span>
+        <div><div style="font-weight:500; margin-bottom:2px;">5' 端加帽（5' Capping）</div>
+        <div class="eq">加上 7-甲基鳥苷酸帽（7-methyl guanosine cap）→ 保護 mRNA、協助核糖體辨認</div></div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-purple">B</span>
+        <div><div style="font-weight:500; margin-bottom:2px;">3' 端加 poly-A 尾</div>
+        <div class="eq">加上 ~200 個腺嘌呤（AAAA...）→ 增加 mRNA 穩定性、協助出核</div></div>
+      </div>
+      <div class="step-row">
+        <span class="step-num num-purple">C</span>
+        <div><div style="font-weight:500; margin-bottom:2px;">RNA 剪接（Splicing）</div>
+        <div class="eq">剪掉內含子（Intron）→ 保留外顯子（Exon）→ 拼接成成熟 mRNA<br>由剪接體（Spliceosome）執行</div></div>
+      </div>
+      <div class="alert-blue">💡 原核生物沒有核膜，轉錄與轉譯可同時進行（coupling）；真核生物則先在核內轉錄加工，再送至細胞質轉譯。</div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:10px;">三種 RNA 的角色</div>
+      <div class="grid3">
+        <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:10px;">
+          <div style="font-weight:500; font-size:13px; margin-bottom:4px;">mRNA</div>
+          <div class="eq">信使 RNA<br>攜帶蛋白質合成密碼</div>
+        </div>
+        <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:10px;">
+          <div style="font-weight:500; font-size:13px; margin-bottom:4px;">tRNA</div>
+          <div class="eq">轉運 RNA<br>攜帶胺基酸到核糖體</div>
+        </div>
+        <div style="border:0.5px solid var(--color-border-tertiary); border-radius:var(--border-radius-md); padding:10px;">
+          <div style="font-weight:500; font-size:13px; margin-bottom:4px;">rRNA</div>
+          <div class="eq">核糖體 RNA<br>構成核糖體的結構</div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 酵素速查 ===== -->
+  <div class="tab-panel" id="tab-enzyme">
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">DNA 複製相關酵素</div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">解旋酶（Helicase）</div>
+        <div class="enzyme-fn">打斷氫鍵，解開 DNA 雙股螺旋，形成複製叉。消耗 ATP。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">拓樸異構酶（Topoisomerase）</div>
+        <div class="enzyme-fn">解除解旋酶造成的超螺旋張力，防止 DNA 打結斷裂。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">引子酶（Primase）</div>
+        <div class="enzyme-fn">合成短 RNA 引子（~10 個核苷酸），提供 DNA 聚合酶所需的 3'-OH 起點。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">DNA 聚合酶 III（原核）/ δ（真核）</div>
+        <div class="enzyme-fn">主要合成酵素，5'→3' 延長新股，同時具 3'→5' 校讀（proofreading）功能。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">DNA 聚合酶 I（原核）</div>
+        <div class="enzyme-fn">移除 RNA 引子，並用 DNA 填補缺口。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">DNA 連接酶（Ligase）</div>
+        <div class="enzyme-fn">封閉岡崎片段間的缺口（nick），形成磷酸二酯鍵，完成連續股。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-info);">SSB（單股結合蛋白）</div>
+        <div class="enzyme-fn">穩定已解開的單股 DNA，防止再配對或被酶解。</div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">RNA 轉錄相關酵素</div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-success);">RNA 聚合酶（RNA Polymerase）</div>
+        <div class="enzyme-fn">核心酵素，依 DNA 模板合成 RNA。<b>不需要引子</b>，可從頭合成。原核只有一種；真核有 RNA Pol I/II/III（分別轉錄 rRNA/mRNA/tRNA）。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-success);">σ（sigma）因子（原核）</div>
+        <div class="enzyme-fn">輔助 RNA 聚合酶辨認啟動子（-10 及 -35 序列），轉錄開始後脫離。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-success);">轉錄因子（Transcription Factors, TFs）（真核）</div>
+        <div class="enzyme-fn">與啟動子（TATA box）結合後，招募 RNA 聚合酶 II 到位，協助起始轉錄。</div>
+      </div>
+      <div class="enzyme-card">
+        <div class="enzyme-name" style="color:var(--color-text-success);">剪接體（Spliceosome）</div>
+        <div class="enzyme-fn">由 snRNA 和蛋白質組成，負責辨認並切除內含子（Intron），拼接外顯子（Exon）。</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 鹼基配對 ===== -->
+  <div class="tab-panel" id="tab-base">
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">鹼基配對規則</div>
+
+      <div style="font-size:13px; font-weight:500; color:var(--color-text-secondary); margin-bottom:8px;">DNA ↔ DNA（複製）</div>
+      <div style="padding:12px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); margin-bottom:14px;">
+        <div class="base-pair">
+          <span class="base" style="background:#E6F1FB; color:#0C447C;">A</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">⟷</span>
+          <span class="base" style="background:#E6F1FB; color:#0C447C;">T</span>
+          <span class="eq" style="margin-left:8px;">（腺嘌呤 ↔ 胸腺嘧啶，2 個氫鍵）</span>
+        </div>
+        <div class="base-pair">
+          <span class="base" style="background:#EAF3DE; color:#27500A;">G</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">⟷</span>
+          <span class="base" style="background:#EAF3DE; color:#27500A;">C</span>
+          <span class="eq" style="margin-left:8px;">（鳥糞嘌呤 ↔ 胞嘧啶，3 個氫鍵）</span>
+        </div>
+      </div>
+
+      <div style="font-size:13px; font-weight:500; color:var(--color-text-secondary); margin-bottom:8px;">DNA → RNA（轉錄）</div>
+      <div style="padding:12px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); margin-bottom:14px;">
+        <div class="base-pair">
+          <span class="base" style="background:#E6F1FB; color:#0C447C;">A</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin: 0 2px;">DNA</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">→</span>
+          <span class="base" style="background:#FAEEDA; color:#633806;">U</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin-left:2px;">RNA</span>
+          <span class="eq" style="margin-left:8px;">DNA 的 A → RNA 的 U（RNA 沒有 T！）</span>
+        </div>
+        <div class="base-pair">
+          <span class="base" style="background:#FAEEDA; color:#633806;">T</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin: 0 2px;">DNA</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">→</span>
+          <span class="base" style="background:#E6F1FB; color:#0C447C;">A</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin-left:2px;">RNA</span>
+          <span class="eq" style="margin-left:8px;">DNA 的 T → RNA 的 A</span>
+        </div>
+        <div class="base-pair">
+          <span class="base" style="background:#EAF3DE; color:#27500A;">G</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin: 0 2px;">DNA</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">→</span>
+          <span class="base" style="background:#EAF3DE; color:#27500A;">C</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin-left:2px;">RNA</span>
+          <span class="eq" style="margin-left:8px;">G ↔ C 不變</span>
+        </div>
+        <div class="base-pair">
+          <span class="base" style="background:#EAF3DE; color:#27500A;">C</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin: 0 2px;">DNA</span>
+          <span style="font-size:16px; color:var(--color-text-secondary);">→</span>
+          <span class="base" style="background:#EAF3DE; color:#27500A;">G</span>
+          <span style="font-size:12px; color:var(--color-text-secondary); margin-left:2px;">RNA</span>
+          <span class="eq" style="margin-left:8px;">C ↔ G 不變</span>
+        </div>
+      </div>
+
+      <div class="alert-amber">⚠️ RNA 中沒有胸腺嘧啶（T）！取而代之的是尿嘧啶（U）。DNA 中也沒有 U。</div>
+      <div style="margin-top:10px; padding:10px 12px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); font-size:13px;">
+        <div style="font-weight:500; margin-bottom:6px;">嘌呤 vs 嘧啶（記憶小技巧）</div>
+        <div class="eq">嘌呤（Purine，雙環）：<b>A、G</b>（記法：AG 諧音「阿哥」都是大咖雙環）</div>
+        <div class="eq">嘧啶（Pyrimidine，單環）：<b>T、C、U</b>（記法：小的單環）</div>
+        <div class="eq" style="margin-top:4px; font-style:italic;">互補原則：嘌呤 always 配嘧啶（A-T/U，G-C）</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 考試重點 ===== -->
+  <div class="tab-panel" id="tab-exam">
+    <div class="card">
+      <div style="font-size:14px; font-weight:500; margin-bottom:12px;">★ 高頻考點整理</div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-weight:500; font-size:13px; margin-bottom:6px; color:var(--color-text-info);">DNA 複製</div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-info);">▸</span><div class="eq"><b>半保留複製</b>：每個子代 DNA 有一股舊的 + 一股新合成的，Meselson-Stahl 實驗證明。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-info);">▸</span><div class="eq"><b>前導股 vs 滯後股</b>：前導股連續合成；滯後股分段（岡崎片段），需多個 RNA 引子。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-info);">▸</span><div class="eq"><b>DNA 聚合酶只能 5'→3' 合成</b>，且不能從頭開始，必須有 3'-OH（引子提供）。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-info);">▸</span><div class="eq"><b>端粒（Telomere）</b>：真核線狀染色體末端因引子移除會縮短，端粒酶（Telomerase）可修復。</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div style="margin-bottom:12px;">
+        <div style="font-weight:500; font-size:13px; margin-bottom:6px; color:var(--color-text-success);">RNA 轉錄</div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-success);">▸</span><div class="eq"><b>RNA 聚合酶不需引子</b>（與 DNA 聚合酶最大差異），可直接從頭合成。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-success);">▸</span><div class="eq"><b>模板股讀取方向</b>：DNA 模板股 3'→5' 方向被讀取，RNA 以 5'→3' 方向合成。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-success);">▸</span><div class="eq"><b>真核加工三步</b>：5' 加帽 → 3' 加 poly-A 尾 → Splicing（剪掉 Intron）。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-success);">▸</span><div class="eq"><b>外顯子 vs 內含子</b>：Exon（外顯子）=「留下來表現的」；Intron（內含子）=「插入的廢棄片段」。</div></div>
+      </div>
+
+      <div class="divider"></div>
+
+      <div>
+        <div style="font-weight:500; font-size:13px; margin-bottom:6px; color:var(--color-text-warning);">常見混淆點</div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-warning);">!</span><div class="eq">「複製」= DNA → DNA；「轉錄」= DNA → RNA；「轉譯」= RNA → 蛋白質。三者要分清楚！</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-warning);">!</span><div class="eq">DNA 有 T 沒有 U；RNA 有 U 沒有 T。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-warning);">!</span><div class="eq">DNA 聚合酶有校讀功能（proofreading），錯誤率低；RNA 聚合酶無校讀。</div></div>
+        <div class="step-row"><span style="margin-right:8px; color:var(--color-text-warning);">!</span><div class="eq">原核無核膜 → 轉錄與轉譯可同步；真核有核膜 → 兩者分開進行。</div></div>
+      </div>
+    </div>
+
+    <div class="card">
+      <div style="font-size:13px; font-weight:500; margin-bottom:8px;">中心法則（Central Dogma）速記</div>
+      <div style="display:flex; align-items:center; gap:10px; flex-wrap:wrap; padding:12px; background:var(--color-background-secondary); border-radius:var(--border-radius-md); font-size:14px;">
+        <span style="font-weight:500; color:var(--color-text-info);">DNA</span>
+        <span style="color:var(--color-text-secondary);">─複製─▶</span>
+        <span style="font-weight:500; color:var(--color-text-info);">DNA</span>
+        <span style="color:var(--color-text-secondary);">─轉錄─▶</span>
+        <span style="font-weight:500; color:var(--color-text-success);">RNA</span>
+        <span style="color:var(--color-text-secondary);">─轉譯─▶</span>
+        <span style="font-weight:500; color:var(--color-text-warning);">蛋白質</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+function go(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.querySelectorAll('.tab-btn').forEach(b => b.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
