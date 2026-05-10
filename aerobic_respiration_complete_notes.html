@@ -1,0 +1,299 @@
+
+<style>
+  .tab-btn { background: transparent; border: 0.5px solid var(--color-border-secondary); border-radius: var(--border-radius-md); padding: 6px 14px; font-size: 13px; cursor: pointer; color: var(--color-text-secondary); transition: all .2s; }
+  .tab-btn.active { background: var(--color-background-info); color: var(--color-text-info); border-color: var(--color-border-info); font-weight: 500; }
+  .tab-btn:hover:not(.active) { background: var(--color-background-secondary); }
+  .tab-panel { display: none; }
+  .tab-panel.active { display: block; }
+  .card { background: var(--color-background-primary); border: 0.5px solid var(--color-border-tertiary); border-radius: var(--border-radius-lg); padding: 1rem 1.25rem; margin-bottom: 12px; }
+  .tag { display: inline-block; font-size: 11px; padding: 2px 10px; border-radius: var(--border-radius-md); font-weight: 500; margin-right: 6px; }
+  .tag-blue { background: var(--color-background-info); color: var(--color-text-info); }
+  .tag-green { background: var(--color-background-success); color: var(--color-text-success); }
+  .tag-amber { background: var(--color-background-warning); color: var(--color-text-warning); }
+  .tag-red { background: var(--color-background-danger); color: var(--color-text-danger); }
+  .row-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+  .mini-label { font-size: 12px; color: var(--color-text-secondary); margin-bottom: 4px; }
+  .val { font-size: 15px; font-weight: 500; color: var(--color-text-primary); }
+  .eq { font-size: 13px; color: var(--color-text-secondary); line-height: 1.7; }
+  .step-num { display: inline-flex; align-items: center; justify-content: center; width: 22px; height: 22px; border-radius: 50%; background: var(--color-background-info); color: var(--color-text-info); font-size: 12px; font-weight: 500; margin-right: 8px; flex-shrink: 0; }
+  .step-row { display: flex; align-items: flex-start; gap: 0; margin-bottom: 10px; font-size: 13px; line-height: 1.6; }
+  .atp-bar-wrap { background: var(--color-background-secondary); border-radius: 6px; height: 18px; margin-top: 4px; overflow: hidden; }
+  .atp-bar { height: 100%; border-radius: 6px; transition: width 1s ease; }
+  .divider { border: none; border-top: 0.5px solid var(--color-border-tertiary); margin: 12px 0; }
+  .alert { background: var(--color-background-warning); border: 0.5px solid var(--color-border-warning); border-radius: var(--border-radius-md); padding: 10px 14px; font-size: 13px; color: var(--color-text-warning); margin-top: 10px; }
+</style>
+
+<h2 class="sr-only">有氧呼吸完整筆記 — 四個階段互動說明</h2>
+
+<div style="padding: 1rem 0 0;">
+  <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; flex-wrap: wrap; gap: 8px;">
+    <div>
+      <div style="font-size: 18px; font-weight: 500; color: var(--color-text-primary);">有氧呼吸完整筆記</div>
+      <div style="font-size: 12px; color: var(--color-text-secondary); margin-top: 2px;">Cellular Aerobic Respiration</div>
+    </div>
+    <div style="display: flex; align-items: center; gap: 6px; background: var(--color-background-success); border-radius: var(--border-radius-md); padding: 6px 14px;">
+      <span style="font-size: 20px; font-weight: 500; color: var(--color-text-success);">36–38</span>
+      <span style="font-size: 12px; color: var(--color-text-success);">ATP / 葡萄糖</span>
+    </div>
+  </div>
+
+  <!-- 總反應式 -->
+  <div class="card" style="text-align: center; margin-bottom: 16px;">
+    <div class="mini-label" style="margin-bottom: 6px;">總反應式</div>
+    <div style="font-size: 15px; font-weight: 500; color: var(--color-text-primary); letter-spacing: 0.5px;">
+      C₆H₁₂O₆ + 6O₂ + 6H₂O → 6CO₂ + 12H₂O + ATP
+    </div>
+  </div>
+
+  <!-- Tabs -->
+  <div style="display: flex; gap: 8px; flex-wrap: wrap; margin-bottom: 16px;">
+    <button class="tab-btn active" onclick="switchTab('overview')">總覽</button>
+    <button class="tab-btn" onclick="switchTab('glycolysis')">① 糖解作用</button>
+    <button class="tab-btn" onclick="switchTab('pyruvate')">② 丙酮酸氧化</button>
+    <button class="tab-btn" onclick="switchTab('krebs')">③ 克氏循環</button>
+    <button class="tab-btn" onclick="switchTab('etc')">④ 電子傳遞鏈</button>
+    <button class="tab-btn" onclick="switchTab('summary')">ATP 總量</button>
+  </div>
+
+  <!-- ===== 總覽 ===== -->
+  <div class="tab-panel active" id="tab-overview">
+    <svg width="100%" viewBox="0 0 640 200" role="img"><title>有氧呼吸四階段流程圖</title><desc>葡萄糖→糖解→丙酮酸氧化→克氏循環→電子傳遞鏈→ATP</desc>
+      <defs><marker id="arr2" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse"><path d="M2 1L8 5L2 9" fill="none" stroke="context-stroke" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/></marker></defs>
+      <!-- Stage boxes -->
+      <g class="c-gray"><rect x="10" y="80" width="110" height="44" rx="8" stroke-width="0.5"/><text class="th" x="65" y="99" text-anchor="middle" dominant-baseline="central" font-size="13">葡萄糖</text><text class="ts" x="65" y="116" text-anchor="middle" dominant-baseline="central">C₆H₁₂O₆</text></g>
+      <line x1="120" y1="102" x2="140" y2="102" class="arr" marker-end="url(#arr2)" stroke="var(--t)"/>
+      <g class="c-purple"><rect x="143" y="74" width="108" height="56" rx="8" stroke-width="0.5"/><text class="th" x="197" y="94" text-anchor="middle" dominant-baseline="central">① 糖解</text><text class="ts" x="197" y="111" text-anchor="middle" dominant-baseline="central">細胞質</text><text class="ts" x="197" y="124" text-anchor="middle" dominant-baseline="central">2 ATP 淨</text></g>
+      <line x1="251" y1="102" x2="271" y2="102" class="arr" marker-end="url(#arr2)" stroke="var(--t)"/>
+      <g class="c-coral"><rect x="274" y="74" width="110" height="56" rx="8" stroke-width="0.5"/><text class="th" x="329" y="94" text-anchor="middle" dominant-baseline="central">② 丙酮酸氧化</text><text class="ts" x="329" y="111" text-anchor="middle" dominant-baseline="central">粒線體基質</text><text class="ts" x="329" y="124" text-anchor="middle" dominant-baseline="central">2 NADH</text></g>
+      <line x1="384" y1="102" x2="404" y2="102" class="arr" marker-end="url(#arr2)" stroke="var(--t)"/>
+      <g class="c-teal"><rect x="407" y="74" width="108" height="56" rx="8" stroke-width="0.5"/><text class="th" x="461" y="94" text-anchor="middle" dominant-baseline="central">③ 克氏循環</text><text class="ts" x="461" y="111" text-anchor="middle" dominant-baseline="central">粒線體基質</text><text class="ts" x="461" y="124" text-anchor="middle" dominant-baseline="central">2 ATP</text></g>
+      <line x1="515" y1="102" x2="535" y2="102" class="arr" marker-end="url(#arr2)" stroke="var(--t)"/>
+      <g class="c-blue"><rect x="538" y="64" width="92" height="76" rx="8" stroke-width="0.5"/><text class="th" x="584" y="90" text-anchor="middle" dominant-baseline="central">④ 電子</text><text class="th" x="584" y="108" text-anchor="middle" dominant-baseline="central">傳遞鏈</text><text class="ts" x="584" y="125" text-anchor="middle" dominant-baseline="central">粒線體內膜</text><text class="ts" x="584" y="140" text-anchor="middle" dominant-baseline="central">~32–34 ATP</text></g>
+      <!-- NADH/FADH2 arrows pointing down to ETC -->
+      <text class="ts" x="197" y="148" text-anchor="middle">2 NADH ↓</text>
+      <text class="ts" x="329" y="148" text-anchor="middle">2 NADH ↓</text>
+      <text class="ts" x="461" y="148" text-anchor="middle">6 NADH + 2 FADH₂ ↓</text>
+      <path d="M197 155 C197 175 584 175 584 145" fill="none" stroke="var(--t)" stroke-width="0.7" stroke-dasharray="4 3" marker-end="url(#arr2)"/>
+    </svg>
+
+    <div class="row-grid" style="margin-top: 4px;">
+      <div class="card" onclick="switchTab('glycolysis'); highlightBtn('glycolysis')" style="cursor:pointer">
+        <span class="tag tag-blue">① 細胞質</span>
+        <div style="font-size: 14px; font-weight: 500; margin: 6px 0 4px;">糖解作用</div>
+        <div class="eq">葡萄糖 → 2 丙酮酸<br>產出 2 ATP、2 NADH</div>
+      </div>
+      <div class="card" onclick="switchTab('pyruvate'); highlightBtn('pyruvate')" style="cursor:pointer">
+        <span class="tag tag-amber">② 粒線體基質</span>
+        <div style="font-size: 14px; font-weight: 500; margin: 6px 0 4px;">丙酮酸氧化</div>
+        <div class="eq">丙酮酸 → 乙醯 CoA<br>產出 2 NADH、2 CO₂</div>
+      </div>
+      <div class="card" onclick="switchTab('krebs'); highlightBtn('krebs')" style="cursor:pointer">
+        <span class="tag tag-green">③ 粒線體基質</span>
+        <div style="font-size: 14px; font-weight: 500; margin: 6px 0 4px;">克氏循環</div>
+        <div class="eq">乙醯 CoA → CO₂<br>產出 2 ATP、6 NADH、2 FADH₂</div>
+      </div>
+      <div class="card" onclick="switchTab('etc'); highlightBtn('etc')" style="cursor:pointer">
+        <span class="tag tag-red">④ 粒線體內膜</span>
+        <div style="font-size: 14px; font-weight: 500; margin: 6px 0 4px;">電子傳遞鏈</div>
+        <div class="eq">NADH/FADH₂ → H₂O<br>產出 ~32–34 ATP</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 糖解作用 ===== -->
+  <div class="tab-panel" id="tab-glycolysis">
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="tag tag-blue">發生位置</span><span style="font-weight:500">細胞質（cytoplasm）</span>
+      </div>
+      <div class="mini-label">反應式</div>
+      <div class="eq" style="margin-bottom:12px;">葡萄糖（C₆H₁₂O₆）+ 2 NAD⁺ + 2 ADP + 2 Pᵢ → 2 丙酮酸（C₃H₄O₃）+ 2 NADH + 2 ATP + 2 H₂O</div>
+      <hr class="divider">
+      <div class="mini-label" style="margin-bottom:8px;">分兩大部分（共10步）</div>
+      <div class="step-row"><span class="step-num">1</span><div><b style="font-weight:500">耗能期（Preparatory phase）</b><br><span class="eq">消耗 2 ATP 將葡萄糖磷酸化，裂解成 2 個三碳分子（PGAL）</span></div></div>
+      <div class="step-row"><span class="step-num">2</span><div><b style="font-weight:500">產能期（Payoff phase）</b><br><span class="eq">氧化 PGAL，產出 4 ATP（底物磷酸化）+ 2 NADH</span></div></div>
+      <hr class="divider">
+      <div class="row-grid">
+        <div><div class="mini-label">淨 ATP</div><div class="val" style="color: var(--color-text-success);">+2 ATP</div></div>
+        <div><div class="mini-label">電子攜帶體</div><div class="val">2 NADH</div></div>
+        <div><div class="mini-label">產物</div><div class="val">2 丙酮酸</div></div>
+        <div><div class="mini-label">需要 O₂？</div><div class="val">❌ 不需要</div></div>
+      </div>
+      <div class="alert">⚠️ 注意：糖解作用在無氧下也能進行！但後續步驟需要氧氣。</div>
+    </div>
+  </div>
+
+  <!-- ===== 丙酮酸氧化 ===== -->
+  <div class="tab-panel" id="tab-pyruvate">
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="tag tag-amber">發生位置</span><span style="font-weight:500">粒線體基質（mitochondrial matrix）</span>
+      </div>
+      <div class="mini-label">反應式（單分子）</div>
+      <div class="eq" style="margin-bottom:12px;">丙酮酸（C₃）+ CoA + NAD⁺ → 乙醯 CoA（C₂）+ CO₂ + NADH</div>
+      <div class="mini-label">每葡萄糖（×2）</div>
+      <div class="eq" style="margin-bottom:12px;">2 丙酮酸 + 2 CoA + 2 NAD⁺ → 2 乙醯 CoA + 2 CO₂ + 2 NADH</div>
+      <hr class="divider">
+      <div class="step-row"><span class="step-num">1</span><div><span class="eq">丙酮酸脫羧（decarboxylation）：釋出 CO₂</span></div></div>
+      <div class="step-row"><span class="step-num">2</span><div><span class="eq">氧化（oxidation）：NAD⁺ → NADH</span></div></div>
+      <div class="step-row"><span class="step-num">3</span><div><span class="eq">與 CoA 結合 → 乙醯 CoA（進入克氏循環）</span></div></div>
+      <hr class="divider">
+      <div class="row-grid">
+        <div><div class="mini-label">淨 ATP</div><div class="val">0 ATP</div></div>
+        <div><div class="mini-label">電子攜帶體</div><div class="val">2 NADH</div></div>
+        <div><div class="mini-label">釋出 CO₂</div><div class="val">2 CO₂</div></div>
+        <div><div class="mini-label">產物</div><div class="val">2 乙醯 CoA</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 克氏循環 ===== -->
+  <div class="tab-panel" id="tab-krebs">
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="tag tag-green">發生位置</span><span style="font-weight:500">粒線體基質（每葡萄糖循環 2 次）</span>
+      </div>
+      <div class="mini-label">每圈產出（×2 = 整體）</div>
+      <div class="eq" style="margin-bottom:12px;">乙醯 CoA（2C）+ 草醋酸（OAA, 4C）→ 檸檬酸（6C）→ ... → 草醋酸（再生）<br>每圈：3 NADH、1 FADH₂、1 ATP、2 CO₂</div>
+      <hr class="divider">
+      <div class="mini-label" style="margin-bottom:8px;">重要中間產物</div>
+      <div class="step-row"><span class="step-num">1</span><div><span class="eq"><b style="font-weight:500">檸檬酸（6C）</b> — 第一個產物，命名來源</span></div></div>
+      <div class="step-row"><span class="step-num">2</span><div><span class="eq"><b style="font-weight:500">α-酮戊二酸（5C）</b> — 脫羧，釋出 CO₂</span></div></div>
+      <div class="step-row"><span class="step-num">3</span><div><span class="eq"><b style="font-weight:500">琥珀酸（4C）</b> — FADH₂ 產生處</span></div></div>
+      <div class="step-row"><span class="step-num">4</span><div><span class="eq"><b style="font-weight:500">草醋酸（4C）</b> — 再生，接受下一個乙醯 CoA</span></div></div>
+      <hr class="divider">
+      <div style="font-size: 13px; font-weight: 500; margin-bottom: 8px;">每葡萄糖總產出（2 圈）</div>
+      <div class="row-grid">
+        <div><div class="mini-label">ATP</div><div class="val" style="color: var(--color-text-success);">2 ATP</div></div>
+        <div><div class="mini-label">NADH</div><div class="val">6 NADH</div></div>
+        <div><div class="mini-label">FADH₂</div><div class="val">2 FADH₂</div></div>
+        <div><div class="mini-label">CO₂ 釋出</div><div class="val">4 CO₂</div></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ===== 電子傳遞鏈 ===== -->
+  <div class="tab-panel" id="tab-etc">
+    <div class="card">
+      <div style="display:flex; align-items:center; gap:10px; margin-bottom:12px;">
+        <span class="tag tag-red">發生位置</span><span style="font-weight:500">粒線體內膜（cristae）</span>
+      </div>
+      <div class="mini-label" style="margin-bottom:8px;">複合體組成</div>
+      <div style="overflow-x:auto;">
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <th style="text-align:left; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">複合體</th>
+            <th style="text-align:left; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">名稱</th>
+            <th style="text-align:center; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">泵出 H⁺</th>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">複合體 I</td><td style="padding:6px 0;">NADH 去氫酶</td><td style="text-align:center; padding:6px 0;">4 H⁺</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">複合體 II</td><td style="padding:6px 0;">琥珀酸去氫酶</td><td style="text-align:center; padding:6px 0;">0（不泵）</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">複合體 III</td><td style="padding:6px 0;">細胞色素 bc₁</td><td style="text-align:center; padding:6px 0;">4 H⁺</td>
+          </tr>
+          <tr>
+            <td style="padding:6px 0;">複合體 IV</td><td style="padding:6px 0;">細胞色素 c 氧化酶</td><td style="text-align:center; padding:6px 0;">2 H⁺</td>
+          </tr>
+        </table>
+      </div>
+      <hr class="divider">
+      <div class="mini-label" style="margin-bottom:8px;">流動電子載體</div>
+      <div class="eq">輔酶 Q（CoQ）：I/II → III ｜ 細胞色素 c（Cyt c）：III → IV</div>
+      <hr class="divider">
+      <div class="mini-label" style="margin-bottom:8px;">化學滲透（chemiosmosis）</div>
+      <div class="step-row"><span class="step-num">1</span><div><span class="eq">H⁺ 被泵入膜間腔 → 形成電化學梯度（質子驅動力）</span></div></div>
+      <div class="step-row"><span class="step-num">2</span><div><span class="eq">H⁺ 回流通過 ATP 合成酶 → ADP + Pᵢ → ATP</span></div></div>
+      <div class="step-row"><span class="step-num">3</span><div><span class="eq">O₂ 為最終電子接受者：O₂ + 4e⁻ + 4H⁺ → 2H₂O</span></div></div>
+      <hr class="divider">
+      <div class="row-grid">
+        <div><div class="mini-label">每 NADH 產</div><div class="val" style="color: var(--color-text-success);">~2.5 ATP</div></div>
+        <div><div class="mini-label">每 FADH₂ 產</div><div class="val" style="color: var(--color-text-warning);">~1.5 ATP</div></div>
+      </div>
+      <div class="alert">⚠️ 氰化物（CN⁻）抑制複合體 IV，使電子傳遞中斷 → ATP 無法產生！</div>
+    </div>
+  </div>
+
+  <!-- ===== ATP 總量 ===== -->
+  <div class="tab-panel" id="tab-summary">
+    <div class="card">
+      <div style="font-size: 14px; font-weight: 500; margin-bottom: 12px;">每分子葡萄糖 ATP 產量</div>
+      <div style="font-size: 13px; color: var(--color-text-secondary); margin-bottom: 12px;">NADH × 2.5 + FADH₂ × 1.5（現代估算）</div>
+
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>① 糖解作用（2 ATP + 2 NADH×2.5）</span><span style="font-weight:500">7 ATP</span>
+        </div>
+        <div class="atp-bar-wrap"><div class="atp-bar" style="width: 18%; background: #534AB7;"></div></div>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>② 丙酮酸氧化（2 NADH×2.5）</span><span style="font-weight:500">5 ATP</span>
+        </div>
+        <div class="atp-bar-wrap"><div class="atp-bar" style="width: 13%; background: #D85A30;"></div></div>
+      </div>
+      <div style="margin-bottom: 12px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>③ 克氏循環（2 ATP + 6 NADH×2.5 + 2 FADH₂×1.5）</span><span style="font-weight:500">20 ATP</span>
+        </div>
+        <div class="atp-bar-wrap"><div class="atp-bar" style="width: 51%; background: #0F6E56;"></div></div>
+      </div>
+      <div style="margin-bottom: 16px;">
+        <div style="display:flex; justify-content:space-between; font-size:13px; margin-bottom:4px;">
+          <span>（加總電子傳遞鏈 NADH+FADH₂ 以上已含）</span><span style="font-weight:500">—</span>
+        </div>
+      </div>
+      <hr class="divider">
+
+      <div style="overflow-x:auto;">
+        <table style="width:100%; font-size:13px; border-collapse:collapse;">
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <th style="text-align:left; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">階段</th>
+            <th style="text-align:center; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">ATP</th>
+            <th style="text-align:center; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">NADH</th>
+            <th style="text-align:center; padding:6px 0; font-weight:500; color:var(--color-text-secondary);">FADH₂</th>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">① 糖解</td><td style="text-align:center;">2</td><td style="text-align:center;">2</td><td style="text-align:center;">—</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">② 丙酮酸氧化</td><td style="text-align:center;">0</td><td style="text-align:center;">2</td><td style="text-align:center;">—</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0;">③ 克氏循環</td><td style="text-align:center;">2</td><td style="text-align:center;">6</td><td style="text-align:center;">2</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0; color:var(--color-text-secondary);">NADH → ETC (×10×2.5)</td><td style="text-align:center; color:var(--color-text-success);">25</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td>
+          </tr>
+          <tr style="border-bottom: 0.5px solid var(--color-border-tertiary);">
+            <td style="padding:6px 0; color:var(--color-text-secondary);">FADH₂ → ETC (×2×1.5)</td><td style="text-align:center; color:var(--color-text-warning);">3</td><td style="text-align:center;">—</td><td style="text-align:center;">—</td>
+          </tr>
+          <tr>
+            <td style="padding:8px 0; font-weight:500;">合計</td>
+            <td style="text-align:center; font-weight:500; font-size:15px; color:var(--color-text-success);">~32</td>
+            <td style="text-align:center;">10</td>
+            <td style="text-align:center;">2</td>
+          </tr>
+        </table>
+      </div>
+      <div class="alert">💡 舊版教科書（底物磷酸化計算）為 36–38 ATP；現代精確值約 30–32 ATP。高中考試以教材為準。</div>
+    </div>
+  </div>
+</div>
+
+<script>
+function switchTab(id) {
+  document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + id).classList.add('active');
+  highlightBtn(id);
+}
+function highlightBtn(id) {
+  const map = { overview:'總覽', glycolysis:'① 糖解作用', pyruvate:'② 丙酮酸氧化', krebs:'③ 克氏循環', etc:'④ 電子傳遞鏈', summary:'ATP 總量' };
+  document.querySelectorAll('.tab-btn').forEach(b => {
+    b.classList.toggle('active', b.textContent.trim() === (map[id] || ''));
+  });
+}
+</script>
